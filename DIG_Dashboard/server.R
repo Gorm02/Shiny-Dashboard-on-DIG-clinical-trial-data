@@ -7,19 +7,26 @@
 #    https://shiny.posit.co/
 #
 
+## app.R ##
 library(shiny)
 library(shinydashboard)
+library(readr)
+library(dplyr)
+library(ggplot2)
 
-# Define server logic required to draw a histogram
-function(input, output) {
-  data <- reactive({
-    req(input$dig.df)
-    read.csv(input$dig.df$datapath)
+server <- function(input, output, session) {
+  output$Baseline_Values_plot <- renderPlot({
+    ggplot(dig.df, aes(x = TRTMT, y = .data[[input$features]], fill = TRTMT)) +
+      geom_boxplot() +
+      scale_fill_manual(values=c("seagreen2", "cornflowerblue")) +
+      geom_jitter(alpha = 0.2) +
+      labs(title = "Figure 1: Patient Ages per Feature",
+           x = "Treatment Group",
+           y = "Feature",
+           fill = "Treatment Group",
+           shape = "Treatment Group")
   })
   
-  output$table1 <- renderDataTable({
-    data()
-  })
 }
 
 
