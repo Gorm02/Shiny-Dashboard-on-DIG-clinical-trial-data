@@ -1,3 +1,5 @@
+library(tidyverse)
+
 dig.df <- read_csv("DIG.csv", 
                    col_names = TRUE, 
                    col_select = c(ID, TRTMT, AGE, SEX, BMI, KLEVEL, CREAT, DIABP, SYSBP, HYPERTEN, CVD, WHF, DIG, HOSP, HOSPDAYS, DEATH, DEATHDAY),
@@ -22,13 +24,16 @@ dig.df <- read_csv("DIG.csv",
                    ))
 
 
+
 ## label the factors described in the codebook: 
 dig.df$TRTMT <- factor(dig.df$TRTMT,
                        levels = c("FALSE", "TRUE"),
                        labels = c("Placebo", "Treatment"))
+
 dig.df$SEX <- factor(dig.df$SEX,
                      levels = c(1, 2),
                      labels = c("Male", "Female"))
+
 dig.df$DEATH <- factor(dig.df$DEATH,
                        levels = c("FALSE", "TRUE"),
                        labels = c("Alive", "Death"))
@@ -50,3 +55,4 @@ dig.df$DIG <- factor(dig.df$DIG,
 dig.df$HOSP <- factor(dig.df$HOSP,
                       levels = c("FALSE", "TRUE"),
                       labels = c("Not Hospitalized", "Hospitalized"))
+
