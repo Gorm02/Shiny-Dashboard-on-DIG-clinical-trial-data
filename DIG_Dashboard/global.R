@@ -23,8 +23,6 @@ dig.df <- read_csv("DIG.csv",
                      DEATHDAY = col_integer(),
                    ))
 
-
-
 ## label the factors described in the codebook: 
 dig.df$TRTMT <- factor(dig.df$TRTMT,
                        levels = c("FALSE", "TRUE"),
