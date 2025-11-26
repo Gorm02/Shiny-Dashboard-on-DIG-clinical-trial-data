@@ -16,6 +16,29 @@ library(ggplot2)
 
 server <- function(input, output, session) {
   
+  # Popup Model that will display critical information and support information
+  
+  observe({
+    showModal(
+      modalDialog(
+        title = "Welcome to our interactive app exploring the DIG clinical trial data",
+        easyClose = T,
+        p("Thank you for showing interest in our interactive app exploring the DIG dataset. Digoxin is one of the oldest drugs used to treat heart failure
+        and concerns about its safty and efficacy is put into question. This apps purpose is to visualize the reported findings to paint a clearer picture than
+        static spreadsheets and graphs."),
+        
+        p(
+        tags$strong("For support, contact:"),
+        tags$br(),
+        "Dylan House: D.House1@universityofgalway.ie",
+        tags$br(),
+        "Clodagh Gormley: C.Gormley8@universityofgalway.ie"
+      )
+     )
+    )
+   }
+  )
+  
   output$Baseline_Values_plot <- renderPlot({
     ggplot(dig.df, aes(x = TRTMT, y = .data[[input$features]], fill = TRTMT)) +
       geom_boxplot() +
@@ -25,8 +48,10 @@ server <- function(input, output, session) {
            x = "Treatment Group",
            y = "Feature",
            fill = "Treatment Group",
-           shape = "Treatment Group")
+           shape = "Treatment Group") +
+      theme_minimal()
   })
+  
   
 }
 

@@ -23,9 +23,8 @@ ui <- dashboardPage(
       menuItem("Study Overview", tabName = "study_overview", icon = icon("tree")),
       menuItem("Substudies", icon = icon("th"), tabName = "substudies", badgeLabel = "new",
                badgeColor = "green"),
-      fileInput(
-        inputId = "dig.df", "Insert DIG data", accept = ".csv"
-      )
+      menuItem("Key Takeaways", icon = icon("book"), tabName = "takeaway", badgeLabel = "Important",
+               badgeColor = "red")
     )
   ),
   
@@ -37,6 +36,13 @@ ui <- dashboardPage(
               box(selectInput("features", "Features:",
                               c("AGE", "BMI")))
       ),
+      # Here are the labels for the Dosage plot we talked about. Add more inputs if necessary.
+      tabItem("study_overview",
+              box(plotOutput("Dosage_Plot")),
+              box(selectInput("outcome", "Outcome:",
+                              c("WHF", "HOSP")))
+              ),
+      
       tabItem("substudies",
               fluidPage(
                 h1("3 Patient Substudies"),
