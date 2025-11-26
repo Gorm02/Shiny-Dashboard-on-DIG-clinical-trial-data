@@ -42,7 +42,7 @@ server <- function(input, output, session) {
   output$Baseline_Values_plot <- renderPlot({
     ggplot(dig.df, aes(x = TRTMT, y = .data[[input$features]], fill = TRTMT)) +
       geom_boxplot() +
-      scale_fill_manual(values=c("seagreen2", "cornflowerblue")) +
+      scale_fill_manual(values=c("cadetblue1", "firebrick4")) +
       geom_jitter(alpha = 0.2) +
       labs(title = "Figure 1: Patient Ages per Feature",
            x = "Treatment Group",
