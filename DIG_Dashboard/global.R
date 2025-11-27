@@ -2,7 +2,7 @@ library(tidyverse)
 
 dig.df <- read_csv("DIG.csv", 
                    col_names = TRUE, 
-                   col_select = c(ID, TRTMT, AGE, SEX, BMI, KLEVEL, CREAT, DIABP, SYSBP, HYPERTEN, CVD, WHF, DIG, HOSP, HOSPDAYS, DEATH, DEATHDAY),
+                   col_select = c(ID, TRTMT, AGE, SEX, BMI, KLEVEL, CREAT, DIABP, SYSBP, HYPERTEN, CVD, WHF, DIG, HOSP, HOSPDAYS, DEATH, DEATHDAY, DIGDOSER, DIGDOSE),
                    col_types = cols(
                      ID = col_integer(),
                      TRTMT = col_logical(),

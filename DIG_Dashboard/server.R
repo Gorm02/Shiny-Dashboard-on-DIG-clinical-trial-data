@@ -39,20 +39,37 @@ server <- function(input, output, session) {
    }
   )
   
+  # Boxplot of placebo/treatment bmi and ages (interactive)
+  
   output$Baseline_Values_plot <- renderPlot({
     ggplot(dig.df, aes(x = TRTMT, y = .data[[input$features]], fill = TRTMT)) +
       geom_boxplot() +
       scale_fill_manual(values=c("cadetblue1", "firebrick4")) +
       geom_jitter(alpha = 0.2) +
-      labs(title = "Figure 1: Patient Ages per Feature",
+      labs(title = "Figure 1: Patient Ages per INSERT_VARIABLE_NAME_HERE",
            x = "Treatment Group",
-           y = "Feature",
+           y = "INSERT_VARIABLE_NAME_HERE",
            fill = "Treatment Group",
            shape = "Treatment Group") +
       theme_minimal()
   })
   
+  # Barplot of patient mortality for placebo/treatment and an effector (CVD, WHF etc)
   
+  output$Mortality_Plot <- renderPlot({
+    ggplot(dig.df, aes(x = .data[[input$features]], fill = DEATH)) +
+      geom_bar(position = "dodge",
+               alpha = 0.75,
+               colour = "black") +
+      facet_wrap(~TRTMT) +
+      scale_fill_manual(values = c("pink", "maroon") ) +
+      theme_bw() + 
+      labs(title = "INSERT_VARIABLE_NAME_HERE and Deaths in Each Treatment Group",
+           fill = "Patient Mortality",
+           x = "INSERT_VARIABLE_NAME_HERE",
+           y = "Number of Patients") +
+      scale_y_continuous(expand = expansion(mult = c(0, 0.05)))
+  })
 }
 
 

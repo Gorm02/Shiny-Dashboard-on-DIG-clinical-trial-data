@@ -36,11 +36,11 @@ ui <- dashboardPage(
               box(selectInput("features", "Features:",
                               c("AGE", "BMI")))
       ),
-      # Here are the labels for the Dosage plot we talked about. Add more inputs if necessary.
-      tabItem("study_overview",
-              box(plotOutput("Dosage_Plot")),
-              box(selectInput("outcome", "Outcome:",
-                              c("WHF", "HOSP")))),
+      # mortality plot in the new tab key takeaways
+      tabItem("takeaway",
+              box(plotOutput("Mortality_Plot")),
+              box(selectInput("features", "Features:",
+                              c("WHF", "CVD")))),
       
       tabItem("substudies",
               fluidPage(
