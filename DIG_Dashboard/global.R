@@ -21,7 +21,8 @@ dig.df <- read_csv("DIG.csv",
                      HOSPDAYS = col_integer(),
                      DEATH = col_logical(),
                      DEATHDAY = col_integer(),
-                   ))
+                     DIGDOSER = col_double(),
+                     DIGDOSE = col_double()))
 
 ## label the factors described in the codebook: 
 dig.df$TRTMT <- factor(dig.df$TRTMT,
@@ -53,4 +54,5 @@ dig.df$DIG <- factor(dig.df$DIG,
 dig.df$HOSP <- factor(dig.df$HOSP,
                       levels = c("FALSE", "TRUE"),
                       labels = c("Not Hospitalized", "Hospitalized"))
+
 

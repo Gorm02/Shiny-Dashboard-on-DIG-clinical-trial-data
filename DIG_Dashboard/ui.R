@@ -40,13 +40,12 @@ ui <- dashboardPage(
       tabItem("study_overview",
               box(plotOutput("Dosage_Plot")),
               box(selectInput("outcome", "Outcome:",
-                              c("WHF", "HOSP")))
-              ),
+                              c("WHF", "HOSP")))),
       
       tabItem("substudies",
               fluidPage(
-                h1("3 Patient Substudies"),
-                h2("Three substudies were conducted. The quality of life/6-minute walk test substudy determined the effect of treatment on a patient's well-being, daily activities, and functional status. The Holter/signal averaging electrocardiogram substudy examined the pathophysiology of sudden cardiac death. The neurohormonal substudy determined whether long-term administration of digoxin attenuated the neuroendocrine response in patients with heart failure.")
+                h2("Study Background"),
+                h4("The digitalis Investigation Group (DIG) study investigated the capacity of the cardiac glycoside, digoxin, to treat systolic heart failure. Glycosides, such as digoxin work by increasing the amount of intracellular sodium retained, enabling the accumulation of intracellular calcium, resulting in stronger cardiac contractions.")
               ))
     )
   )
