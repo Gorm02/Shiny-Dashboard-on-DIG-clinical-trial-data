@@ -71,13 +71,14 @@ dig.df <- dig.df %>%
   filter(KLEVEL != 434 | is.na(KLEVEL))
 
 
-# Data for the survfit functions:
+# Data for the survfit functionS:
 survfit.df <- dig.df %>%
   mutate(DEATH  = case_when(
     DEATH == "Alive" ~ 0,
     DEATH == "Death" ~ 1
   ))
 
+# Preparing for the basic survival plot
 TRTMT_FIT <- survfit(Surv(Month, DEATH) ~ TRTMT, data = survfit.df)
 
 # now we need to change it from the probability of surviving to the risk of dying.
@@ -86,3 +87,14 @@ Mort_TRTMT_Fit$surv <- 1- TRTMT_FIT$surv
 # flip the confidence interval
 Mort_TRTMT_Fit$upper <- 1 - TRTMT_FIT$lower
 Mort_TRTMT_Fit$lower <- 1 - TRTMT_FIT$upper
+
+
+# # Preparing for the interactive survival plot
+# INTERACT_FIT <- survfit(Surv(Month, DEATH) ~ TRTMT + CVD, data = survfit.df)
+# 
+# # now we need to change it from the probability of surviving to the risk of dying.
+# Mort_INTERACT_Fit <- INTERACT_FIT
+# Mort_INTERACT_Fit$surv <- 1- INTERACT_FIT$surv
+# # flip the confidence interval
+# Mort_INTERACT_Fit$upper <- 1 - INTERACT_FIT$lower
+# Mort_INTERACT_Fit$lower <- 1 - INTERACT_FIT$upper

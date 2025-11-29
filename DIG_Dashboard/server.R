@@ -47,7 +47,7 @@ server <- function(input, output, session) {
       geom_boxplot() +
       scale_fill_manual(values=c("cadetblue1", "firebrick4")) +
       geom_jitter(alpha = 0.1) +
-      labs(title = "Figure 1: Patient INSERT_VARIABLE_NAME_HERE in Each Treatment Group",
+      labs(title = paste("Figure 1: Patient ", input$features, " in Each Treatment Group"),
            x = "Treatment Group",
            y = input$features,
            fill = "Treatment Group") +
@@ -64,7 +64,7 @@ server <- function(input, output, session) {
       #      facet_wrap(~TRTMT) +
       scale_fill_manual(values = c("yellow", "purple") ) +
       theme_bw() + 
-      labs(title = "Baseline INSERT_VARIABLE_NAME_HERE  in Each Treatment Group",
+      labs(title = paste("Baseline ", input$feature, " in Each Treatment Group"),
            fill = "Treatment Group",
            x = input$features,
            y = "Number of Patients") +
@@ -82,7 +82,7 @@ server <- function(input, output, session) {
       facet_wrap(~TRTMT) +
       scale_fill_manual(values = c("pink", "maroon") ) +
       theme_bw() + 
-      labs(title = "INSERT_VARIABLE_NAME_HERE and Deaths in Each Treatment Group",
+      labs(title = paste(input$features, " and Deaths in Each Treatment Group"),
            fill = "Patient Mortality",
            x = input$features,
            y = "Number of Patients") +
@@ -100,7 +100,7 @@ server <- function(input, output, session) {
       facet_wrap(~TRTMT) +
       scale_fill_manual(values = c("lightgrey", "blue") ) +
       theme_bw() + 
-      labs(title = "INSERT_VARIABLE_NAME_HERE and Hospitalisations in Each Treatment Group",
+      labs(title = paste(input$features, " and Hospitalisations in Each Treatment Group"),
            fill = "Patient Hospitalisations",
            x = input$features,
            y = "Number of Patients") +
@@ -114,7 +114,7 @@ server <- function(input, output, session) {
       facet_wrap(~TRTMT) +
       scale_fill_manual(values=c("pink", "maroon") ) +
       geom_jitter(alpha = 0.1) +
-      labs(title = "Figure 1: Patient Mortality in Each Treatment Group by INSERT_VARIABLE_NAME_HERE",
+      labs(title = paste("Figure 1: Patient Mortality in Each Treatment Group by ", input$features),
            x = "Treatment Group",
            y = input$features,
            fill = "Treatment Group") +
@@ -127,7 +127,7 @@ server <- function(input, output, session) {
       facet_wrap(~TRTMT) +
       scale_fill_manual(values=c("pink", "maroon") ) +
       geom_jitter(alpha = 0.1) +
-      labs(title = "Figure 1: Patient Hospitalisations in Each Treatment Group by INSERT_VARIABLE_NAME_HERE",
+      labs(title = paste("Figure 1: Patient Hospitalisations in Each Treatment Group by ", input$features),
            x = "Treatment Group",
            y = input$features,
            fill = "Treatment Group") +
@@ -152,7 +152,7 @@ server <- function(input, output, session) {
                legend.labs = 
                  c("Placebo", "Treatment"),
                palette = c("cadetblue1", "firebrick4"),
-               title = "Risk of Mortality Over Time",
+               title = paste("Risk of Mortality Over Time for Patients With ", input$features),
                subtitle = "Within each Treatment Group",
                font.title = c(22, "bold", "black"),
                ggtheme = theme_classic() + 
@@ -161,6 +161,50 @@ server <- function(input, output, session) {
                risk.table.height = 0.25,
                risk.table.fontsize = 3.0)
   })
+  
+  # Preparing for the interactive survival plot (reactive expression):
+  survfit_reactive_model <- reactive({
+    formula <- as.formula(paste("Surv(Month, DEATH) ~ TRTMT +", input$features))
+    interact_fit <- survfit(Surv(Month, DEATH) ~ TRTMT + get(input$features), data = survfit.df)
+    interact_fit$surv <- 1 - interact_fit$surv
+    interact_fit$lower <- 1 - interact_fit$lower
+    interact_fit$upper <- 1- interact_fit$upper
+    return(interact_fit)
+  })
+  
+  
+  # plot this interactively
+  output$survPlot <- renderPlot({
+    plot(survfit_reactive_model(), main = paste("Survival Curve for", input$features), col = 1:2)
+  })
+  
+  # # Interactive mortality plot
+  #  output$interact_surv_plot <- renderPlot({
+  #    ggsurvplot(survfit_reactive_model(),
+  #               pval = TRUE, 
+  #               conf.int = TRUE,
+  #               conf.int.style = "step",
+  #               xlab = "Time in Months",
+  #               ylab = "Risk of Mortality",
+  #               break.time.by = 6,
+  #               risk.table = "abs_pct",
+  #               risk.table.col = "strata",
+  #               risk.table.y.text = FALSE,
+  #               linetype = "strata",
+  #               ncensor.plot = TRUE,
+  #               censor.shape="|",
+  #               censor.size = 3,
+  #              # legend.labs =
+  #              #   c("Placebo + No CVD", "Placebo + CVD", "Treatment + No CVD", "Treatment + CVD"),
+  #               palette =  "Awtools",
+  #               title = "Figure 17: Risk of Mortality Over Time",
+  #               subtitle = "Within each Treatment Group",
+  #               font.title = c(22, "bold", "black"),
+  #               ggtheme = theme_minimal() + theme(plot.title = element_text(hjust = 0.5, face = "bold"))+
+  #               theme(plot.subtitle = element_text(hjust = 0.5, size = 16, face = "italic")),
+  #               risk.table.height = 0.25,
+  #               risk.table.fontsize = 2.0)
+  #    })
 }
 
 

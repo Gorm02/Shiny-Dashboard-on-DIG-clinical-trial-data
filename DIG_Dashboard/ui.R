@@ -28,7 +28,8 @@ ui <- dashboardPage(
                badgeColor = "red"),
       menuItem("Continuous Deaths", tabName = "cont_death", icon = icon("circle")),
       menuItem("Continuous Hospitalisations", tabName = "cont_hosp", icon = icon("circle")),
-      menuItem("Basic Mortality Plot", tabName = "bas_mort_plot", icon = icon("circle"))
+      menuItem("Basic Mortality", tabName = "bas_mort", icon = icon("circle")),
+      menuItem("Interactive Mortality", tabName = "interact_surv", icon = icon("circle"))
     )
   ),
   
@@ -66,8 +67,14 @@ ui <- dashboardPage(
               box(plotOutput("continuous_hospitalisations_plot")),
               box(selectInput("features", "Features:",
                               c("Age" = "AGE", "BMI", "Serum Potassium Level" = "KLEVEL", "Serum Creatinine (mg/dL)" = "CREAT", "Ejection Fraction Percent" = "EJF_PER")))),
-      tabItem("bas_mort_plot",
-              box(plotOutput("basic_surv_plot")))
+      tabItem("bas_mort",
+              box(plotOutput("basic_surv_plot"))),
+      
+      tabItem("interact_surv",
+              box(plotOutput("survPlot")),
+              box(selectInput("features", "Features:",
+                              c("CVD", "WHF"), selected = "CVD")))
+    
       )
     )
   )
