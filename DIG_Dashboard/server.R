@@ -87,6 +87,23 @@ server <- function(input, output, session) {
            y = "Number of Patients") +
       scale_y_continuous(expand = expansion(mult = c(0, 0.05)))
   })
+  
+  # Barplot of categorical baseline characteristics
+  output$categorical_baseline_plot <- renderPlot({
+    ggplot(dig.df, aes(x = .data[[input$features]], fill = TRTMT)) +
+      geom_bar(position = "dodge",
+               alpha = 0.75,
+               colour = "black") +
+#      facet_wrap(~TRTMT) +
+      scale_fill_manual(values = c("yellow", "purple") ) +
+      theme_bw() + 
+      labs(title = "Baseline INSERT_VARIABLE_NAME_HERE  in Each Treatment Group",
+           fill = "Treatment Group",
+           x = "INSERT_VARIABLE_NAME_HERE",
+           y = "Number of Patients") +
+      scale_y_continuous(expand = expansion(mult = c(0, 0.05)))
+  })
+  
 }
 
 

@@ -24,7 +24,8 @@ ui <- dashboardPage(
       menuItem("Substudies", icon = icon("th"), tabName = "substudies", badgeLabel = "new",
                badgeColor = "green"),
       menuItem("Key Takeaways", icon = icon("book"), tabName = "takeaway", badgeLabel = "Important",
-               badgeColor = "red")
+               badgeColor = "red"),
+      menuItem("Baseline Characteristics", tabName = "cat_base_char", icon = icon("circle"))
     )
   ),
   
@@ -47,7 +48,12 @@ ui <- dashboardPage(
               fluidPage(
                 h2("Study Background"),
                 h4("The digitalis Investigation Group (DIG) study investigated the capacity of the cardiac glycoside, digoxin, to treat systolic heart failure. Glycosides, such as digoxin work by increasing the amount of intracellular sodium retained, enabling the accumulation of intracellular calcium, resulting in stronger cardiac contractions.")
-              ))
+              )),
+      
+      tabItem("cat_base_char",
+              box(plotOutput("categorical_baseline_plot")),
+              box(selectInput("features", "Features:",
+                                    c("SEX", "HYPERTEN"))))
     )
   )
 )

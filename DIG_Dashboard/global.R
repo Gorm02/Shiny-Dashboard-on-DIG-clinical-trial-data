@@ -56,3 +56,4 @@ dig.df$HOSP <- factor(dig.df$HOSP,
                       labels = c("Not Hospitalized", "Hospitalized"))
 
 
+dig.df <- na.omit(dig.df)
