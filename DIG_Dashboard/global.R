@@ -2,7 +2,7 @@ library(tidyverse)
 
 dig.df <- read_csv("DIG.csv", 
                    col_names = TRUE, 
-                   col_select = c(ID, TRTMT, AGE, SEX, BMI, KLEVEL, CREAT, DIABP, SYSBP, HYPERTEN, CVD, WHF, DIG, HOSP, HOSPDAYS, DEATH, DEATHDAY, DIGDOSER, DIGDOSE, RACE),
+                   col_select = c(ID, TRTMT, AGE, SEX, BMI, KLEVEL, CREAT, DIABP, SYSBP, HYPERTEN, CVD, WHF, DIG, HOSP, HOSPDAYS, DEATH, DEATHDAY, DIGDOSER, DIGDOSE, RACE, EJF_PER),
                    col_types = cols(
                      ID = col_integer(),
                      TRTMT = col_logical(),
@@ -23,7 +23,8 @@ dig.df <- read_csv("DIG.csv",
                      DEATHDAY = col_integer(),
                      DIGDOSER = col_double(),
                      DIGDOSE = col_double(),
-                     RACE = col_factor()))
+                     RACE = col_factor(),
+                     EJF_PER = col_double()))
 
 ## label the factors described in the codebook: 
 dig.df$TRTMT <- factor(dig.df$TRTMT,

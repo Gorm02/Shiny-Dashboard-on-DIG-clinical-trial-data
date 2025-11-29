@@ -56,7 +56,7 @@ server <- function(input, output, session) {
   
   # Barplot of categorical baseline characteristics
   output$categorical_baseline_plot <- renderPlot({
-    ggplot(data = dig.df, aes(x = .data[[input$features]], fill = TRTMT)) +
+    ggplot(data = dig.df[!is.na(dig.df[[input$features]]), ], aes(x = .data[[input$features]], fill = TRTMT)) +
       geom_bar(position = "dodge",
                alpha = 0.75,
                colour = "black") +

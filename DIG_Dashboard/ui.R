@@ -35,7 +35,7 @@ ui <- dashboardPage(
       tabItem("study_overview",
               box(plotOutput("Baseline_Values_plot")),
               box(selectInput("features", "Features:",
-                              c("Age" = "AGE", "BMI", "Serum Potassium Level" = "KLEVEL", "Serum Creatinine (mg/dL)" = "CREAT")))
+                              c("Age" = "AGE", "BMI", "Serum Potassium Level" = "KLEVEL", "Serum Creatinine (mg/dL)" = "CREAT", "Ejection Fraction Percent" = "EJF_PER")))
       ),
       # mortality plot in the new tab key takeaways
       tabItem("takeaway",
@@ -53,7 +53,7 @@ ui <- dashboardPage(
       tabItem("cat_base_char",
               box(plotOutput("categorical_baseline_plot")),
               box(selectInput("features", "Features:",
-                                    c("SEX", "HYPERTEN"))))
+                                    c("Sex" = "SEX", "History of Hypertension" = "HYPERTEN", "Race" = "RACE"))))
     )
   )
 )
