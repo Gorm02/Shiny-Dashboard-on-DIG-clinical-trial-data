@@ -2,7 +2,7 @@ library(tidyverse)
 
 dig.df <- read_csv("DIG.csv", 
                    col_names = TRUE, 
-                   col_select = c(ID, TRTMT, AGE, SEX, BMI, KLEVEL, CREAT, DIABP, SYSBP, HYPERTEN, CVD, WHF, DIG, HOSP, HOSPDAYS, DEATH, DEATHDAY, DIGDOSER, DIGDOSE),
+                   col_select = c(ID, TRTMT, AGE, SEX, BMI, KLEVEL, CREAT, DIABP, SYSBP, HYPERTEN, CVD, WHF, DIG, HOSP, HOSPDAYS, DEATH, DEATHDAY, DIGDOSER, DIGDOSE, RACE),
                    col_types = cols(
                      ID = col_integer(),
                      TRTMT = col_logical(),
@@ -22,7 +22,8 @@ dig.df <- read_csv("DIG.csv",
                      DEATH = col_logical(),
                      DEATHDAY = col_integer(),
                      DIGDOSER = col_double(),
-                     DIGDOSE = col_double()))
+                     DIGDOSE = col_double(),
+                     RACE = col_factor()))
 
 ## label the factors described in the codebook: 
 dig.df$TRTMT <- factor(dig.df$TRTMT,
@@ -54,6 +55,11 @@ dig.df$DIG <- factor(dig.df$DIG,
 dig.df$HOSP <- factor(dig.df$HOSP,
                       levels = c("FALSE", "TRUE"),
                       labels = c("Not Hospitalized", "Hospitalized"))
+dig.df$RACE <- factor(dig.df$RACE,
+                      levels = c(1, 2),
+                      labels = c("White", "Nonwhite"))
 
 
-dig.df <- na.omit(dig.df)
+# Remove the row with the serum potassium outlier but not the na values (there are 801 NA values in this column)
+dig.df <- dig.df %>%
+  filter(KLEVEL != 434 | is.na(KLEVEL))

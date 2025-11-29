@@ -21,11 +21,11 @@ ui <- dashboardPage(
     sidebarMenu(
       # use menuItem to make tabs for different components of the study we want to discuss:
       menuItem("Study Overview", tabName = "study_overview", icon = icon("tree")),
+      menuItem("Baseline Characteristics", tabName = "cat_base_char", icon = icon("circle")),
       menuItem("Substudies", icon = icon("th"), tabName = "substudies", badgeLabel = "new",
                badgeColor = "green"),
       menuItem("Key Takeaways", icon = icon("book"), tabName = "takeaway", badgeLabel = "Important",
-               badgeColor = "red"),
-      menuItem("Baseline Characteristics", tabName = "cat_base_char", icon = icon("circle"))
+               badgeColor = "red")
     )
   ),
   
@@ -35,7 +35,7 @@ ui <- dashboardPage(
       tabItem("study_overview",
               box(plotOutput("Baseline_Values_plot")),
               box(selectInput("features", "Features:",
-                              c("AGE", "BMI")))
+                              c("Age" = "AGE", "BMI", "Serum Potassium Level" = "KLEVEL", "Serum Creatinine (mg/dL)" = "CREAT")))
       ),
       # mortality plot in the new tab key takeaways
       tabItem("takeaway",

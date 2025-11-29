@@ -39,25 +39,41 @@ server <- function(input, output, session) {
    }
   )
   
-  # Boxplot of placebo/treatment bmi and ages (interactive)
+  # Boxplot of continuous baseline characteristics
   
   output$Baseline_Values_plot <- renderPlot({
-    ggplot(dig.df, aes(x = TRTMT, y = .data[[input$features]], fill = TRTMT)) +
+    ggplot(data = dig.df, aes(x = TRTMT, y = .data[[input$features]], fill = TRTMT)) +
       geom_boxplot() +
       scale_fill_manual(values=c("cadetblue1", "firebrick4")) +
-      geom_jitter(alpha = 0.2) +
-      labs(title = "Figure 1: Patient Ages per INSERT_VARIABLE_NAME_HERE",
+      geom_jitter(alpha = 0.1) +
+      labs(title = "Figure 1: Patient INSERT_VARIABLE_NAME_HERE in Each Treatment Group",
            x = "Treatment Group",
-           y = "INSERT_VARIABLE_NAME_HERE",
+           y = input$features,
            fill = "Treatment Group",
            shape = "Treatment Group") +
       theme_minimal()
   })
   
+  # Barplot of categorical baseline characteristics
+  output$categorical_baseline_plot <- renderPlot({
+    ggplot(data = dig.df, aes(x = .data[[input$features]], fill = TRTMT)) +
+      geom_bar(position = "dodge",
+               alpha = 0.75,
+               colour = "black") +
+      #      facet_wrap(~TRTMT) +
+      scale_fill_manual(values = c("yellow", "purple") ) +
+      theme_bw() + 
+      labs(title = "Baseline INSERT_VARIABLE_NAME_HERE  in Each Treatment Group",
+           fill = "Treatment Group",
+           x = input$features,
+           y = "Number of Patients") +
+      scale_y_continuous(expand = expansion(mult = c(0, 0.05)))
+  })
+  
   # Barplot of patient mortality for placebo/treatment and an effector (CVD, WHF etc)
   
   output$Mortality_Plot <- renderPlot({
-    ggplot(dig.df, aes(x = .data[[input$features]], fill = DEATH)) +
+    ggplot(data = dig.df, aes(x = .data[[input$features]], fill = DEATH)) +
       geom_bar(position = "dodge",
                alpha = 0.75,
                colour = "black") +
@@ -66,7 +82,7 @@ server <- function(input, output, session) {
       theme_bw() + 
       labs(title = "INSERT_VARIABLE_NAME_HERE and Deaths in Each Treatment Group",
            fill = "Patient Mortality",
-           x = "INSERT_VARIABLE_NAME_HERE",
+           x = input$features,
            y = "Number of Patients") +
       scale_y_continuous(expand = expansion(mult = c(0, 0.05)))
   })
@@ -74,7 +90,7 @@ server <- function(input, output, session) {
   # Barplot of patient hospitalisation for placebo/treatment and an effector (CVD, WHF etc)
   
   output$Hospitalisation_Plot <- renderPlot({
-    ggplot(dig.df, aes(x = .data[[input$features]], fill = HOSP)) +
+    ggplot(data = dig.df, aes(x = .data[[input$features]], fill = HOSP)) +
       geom_bar(position = "dodge",
                alpha = 0.75,
                colour = "black") +
@@ -83,26 +99,11 @@ server <- function(input, output, session) {
       theme_bw() + 
       labs(title = "INSERT_VARIABLE_NAME_HERE and Hospitalisations in Each Treatment Group",
            fill = "Patient Hospitalisations",
-           x = "INSERT_VARIABLE_NAME_HERE",
+           x = input$features,
            y = "Number of Patients") +
       scale_y_continuous(expand = expansion(mult = c(0, 0.05)))
   })
   
-  # Barplot of categorical baseline characteristics
-  output$categorical_baseline_plot <- renderPlot({
-    ggplot(dig.df, aes(x = .data[[input$features]], fill = TRTMT)) +
-      geom_bar(position = "dodge",
-               alpha = 0.75,
-               colour = "black") +
-#      facet_wrap(~TRTMT) +
-      scale_fill_manual(values = c("yellow", "purple") ) +
-      theme_bw() + 
-      labs(title = "Baseline INSERT_VARIABLE_NAME_HERE  in Each Treatment Group",
-           fill = "Treatment Group",
-           x = "INSERT_VARIABLE_NAME_HERE",
-           y = "Number of Patients") +
-      scale_y_continuous(expand = expansion(mult = c(0, 0.05)))
-  })
   
 }
 
