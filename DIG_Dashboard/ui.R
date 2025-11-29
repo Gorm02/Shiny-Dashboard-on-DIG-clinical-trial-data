@@ -25,7 +25,8 @@ ui <- dashboardPage(
       menuItem("Substudies", icon = icon("th"), tabName = "substudies", badgeLabel = "new",
                badgeColor = "green"),
       menuItem("Key Takeaways", icon = icon("book"), tabName = "takeaway", badgeLabel = "Important",
-               badgeColor = "red")
+               badgeColor = "red"),
+      menuItem("Continuous Deaths", tabName = "cont_death", icon = icon("circle"))
     )
   ),
   
@@ -53,8 +54,14 @@ ui <- dashboardPage(
       tabItem("cat_base_char",
               box(plotOutput("categorical_baseline_plot")),
               box(selectInput("features", "Features:",
-                                    c("Sex" = "SEX", "History of Hypertension" = "HYPERTEN", "Race" = "RACE"))))
+                                    c("Sex" = "SEX", "History of Hypertension" = "HYPERTEN", "Race" = "RACE")))),
+      
+      tabItem("cont_death",
+              box(plotOutput("continuous_deaths_plot")),
+              box(selectInput("features", "Features:",
+                              c("Age" = "AGE", "BMI", "Serum Potassium Level" = "KLEVEL", "Serum Creatinine (mg/dL)" = "CREAT", "Ejection Fraction Percent" = "EJF_PER"))))
+      )
     )
   )
-)
+
 

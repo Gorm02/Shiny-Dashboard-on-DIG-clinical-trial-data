@@ -39,6 +39,7 @@ server <- function(input, output, session) {
    }
   )
   
+  # CONTINUOUS BASELINE
   # Boxplot of continuous baseline characteristics
   
   output$Baseline_Values_plot <- renderPlot({
@@ -49,11 +50,11 @@ server <- function(input, output, session) {
       labs(title = "Figure 1: Patient INSERT_VARIABLE_NAME_HERE in Each Treatment Group",
            x = "Treatment Group",
            y = input$features,
-           fill = "Treatment Group",
-           shape = "Treatment Group") +
+           fill = "Treatment Group") +
       theme_minimal()
   })
   
+  # CATEGORICAL BASELINE
   # Barplot of categorical baseline characteristics
   output$categorical_baseline_plot <- renderPlot({
     ggplot(data = dig.df[!is.na(dig.df[[input$features]]), ], aes(x = .data[[input$features]], fill = TRTMT)) +
@@ -70,6 +71,7 @@ server <- function(input, output, session) {
       scale_y_continuous(expand = expansion(mult = c(0, 0.05)))
   })
   
+  # CATEGORICAL DEATHS
   # Barplot of patient mortality for placebo/treatment and an effector (CVD, WHF etc)
   
   output$Mortality_Plot <- renderPlot({
@@ -87,6 +89,7 @@ server <- function(input, output, session) {
       scale_y_continuous(expand = expansion(mult = c(0, 0.05)))
   })
   
+  # CATEGORICAL HOSPITALISATIONS
   # Barplot of patient hospitalisation for placebo/treatment and an effector (CVD, WHF etc)
   
   output$Hospitalisation_Plot <- renderPlot({
@@ -104,7 +107,21 @@ server <- function(input, output, session) {
       scale_y_continuous(expand = expansion(mult = c(0, 0.05)))
   })
   
-  
+  # CONTINUOUS DEATHS
+  output$continuous_deaths_plot <- renderPlot({
+    ggplot(data = dig.df, aes(x = DEATH, y = .data[[input$features]], fill = DEATH)) +
+      geom_boxplot() +
+      facet_wrap(~TRTMT) +
+      scale_fill_manual(values=c("pink", "maroon") ) +
+      geom_jitter(alpha = 0.1) +
+      labs(title = "Figure 1: Patient Mortality in Each Treatment Group by INSERT_VARIABLE_NAME_HERE",
+           x = "Treatment Group",
+           y = input$features,
+           fill = "Treatment Group") +
+      theme_minimal()
+  })
+  # CONTINUOUS HOSPITALISATIONS
+  # DEATH RISK PLOT
 }
 
 
