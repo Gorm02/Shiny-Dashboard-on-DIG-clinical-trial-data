@@ -70,6 +70,23 @@ server <- function(input, output, session) {
            y = "Number of Patients") +
       scale_y_continuous(expand = expansion(mult = c(0, 0.05)))
   })
+  
+  # Barplot of patient hospitalisation for placebo/treatment and an effector (CVD, WHF etc)
+  
+  output$Hospitalisation_Plot <- renderPlot({
+    ggplot(dig.df, aes(x = .data[[input$features]], fill = HOSP)) +
+      geom_bar(position = "dodge",
+               alpha = 0.75,
+               colour = "black") +
+      facet_wrap(~TRTMT) +
+      scale_fill_manual(values = c("lightgrey", "blue") ) +
+      theme_bw() + 
+      labs(title = "INSERT_VARIABLE_NAME_HERE and Hospitalisations in Each Treatment Group",
+           fill = "Patient Hospitalisations",
+           x = "INSERT_VARIABLE_NAME_HERE",
+           y = "Number of Patients") +
+      scale_y_continuous(expand = expansion(mult = c(0, 0.05)))
+  })
 }
 
 

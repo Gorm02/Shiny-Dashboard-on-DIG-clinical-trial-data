@@ -38,8 +38,9 @@ ui <- dashboardPage(
       ),
       # mortality plot in the new tab key takeaways
       tabItem("takeaway",
-              box(plotOutput("Mortality_Plot")),
-              box(selectInput("features", "Features:",
+              fluidPage(plotOutput("Mortality_Plot"),
+                        plotOutput("Hospitalisation_Plot"),
+                        selectInput("features", "Features:",
                               c("WHF", "CVD")))),
       
       tabItem("substudies",
