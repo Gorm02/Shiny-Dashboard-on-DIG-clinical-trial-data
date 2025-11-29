@@ -133,7 +133,34 @@ server <- function(input, output, session) {
            fill = "Treatment Group") +
       theme_minimal()
   })
+  
   # DEATH RISK PLOT
+  output$basic_surv_plot <- renderPlot({
+    ggsurvplot(Mort_TRTMT_Fit,
+               pval = TRUE, conf.int = TRUE,
+               conf.int.style = "step",
+               xlab = "Time in Months",
+               ylab = "Risk of Mortality",
+               break.time.by = 6,
+               risk.table = "abs_pct", 
+               risk.table.col = "strata", 
+               risk.table.y.text = FALSE,
+               linetype = "strata",
+               ncensor.plot = TRUE,  
+               censor.shape="|",
+               censor.size = 3,
+               legend.labs = 
+                 c("Placebo", "Treatment"),
+               palette = c("cadetblue1", "firebrick4"),
+               title = "Risk of Mortality Over Time",
+               subtitle = "Within each Treatment Group",
+               font.title = c(22, "bold", "black"),
+               ggtheme = theme_classic() + 
+                 theme(plot.title = element_text(hjust = 0.5, face = "bold"))+
+                 theme(plot.subtitle = element_text(hjust = 0.5, size = 16, face = "italic")),
+               risk.table.height = 0.25,
+               risk.table.fontsize = 3.0)
+  })
 }
 
 

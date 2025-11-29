@@ -1,4 +1,6 @@
 library(tidyverse)
+library("survival")
+library("survminer")
 
 dig.df <- read_csv("DIG.csv", 
                    col_names = TRUE, 
@@ -60,7 +62,27 @@ dig.df$RACE <- factor(dig.df$RACE,
                       levels = c(1, 2),
                       labels = c("White", "Nonwhite"))
 
+## mutate dig.df to include a new column,"Month":
+dig.df <- dig.df %>%
+  mutate(Month = round(DEATHDAY/30))
 
 # Remove the row with the serum potassium outlier but not the na values (there are 801 NA values in this column)
 dig.df <- dig.df %>%
   filter(KLEVEL != 434 | is.na(KLEVEL))
+
+
+# Data for the survfit functions:
+survfit.df <- dig.df %>%
+  mutate(DEATH  = case_when(
+    DEATH == "Alive" ~ 0,
+    DEATH == "Death" ~ 1
+  ))
+
+TRTMT_FIT <- survfit(Surv(Month, DEATH) ~ TRTMT, data = survfit.df)
+
+# now we need to change it from the probability of surviving to the risk of dying.
+Mort_TRTMT_Fit <- TRTMT_FIT
+Mort_TRTMT_Fit$surv <- 1- TRTMT_FIT$surv
+# flip the confidence interval
+Mort_TRTMT_Fit$upper <- 1 - TRTMT_FIT$lower
+Mort_TRTMT_Fit$lower <- 1 - TRTMT_FIT$upper
