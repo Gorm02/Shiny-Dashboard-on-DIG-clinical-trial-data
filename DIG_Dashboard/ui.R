@@ -26,7 +26,8 @@ ui <- dashboardPage(
                badgeColor = "green"),
       menuItem("Key Takeaways", icon = icon("book"), tabName = "takeaway", badgeLabel = "Important",
                badgeColor = "red"),
-      menuItem("Continuous Deaths", tabName = "cont_death", icon = icon("circle"))
+      menuItem("Continuous Deaths", tabName = "cont_death", icon = icon("circle")),
+      menuItem("Continuous Hospitalisations", tabName = "cont_hosp", icon = icon("circle"))
     )
   ),
   
@@ -43,7 +44,7 @@ ui <- dashboardPage(
               fluidPage(plotOutput("Mortality_Plot"),
                         plotOutput("Hospitalisation_Plot"),
                         selectInput("features", "Features:",
-                              c("WHF", "CVD")))),
+                              c("WHF", "CVD", "Sex" = "SEX", "History of Hypertension" = "HYPERTEN", "Race" = "RACE")))),
       
       tabItem("substudies",
               fluidPage(
@@ -58,6 +59,10 @@ ui <- dashboardPage(
       
       tabItem("cont_death",
               box(plotOutput("continuous_deaths_plot")),
+              box(selectInput("features", "Features:",
+                              c("Age" = "AGE", "BMI", "Serum Potassium Level" = "KLEVEL", "Serum Creatinine (mg/dL)" = "CREAT", "Ejection Fraction Percent" = "EJF_PER")))),
+      tabItem("cont_hosp",
+              box(plotOutput("continuous_hospitalisations_plot")),
               box(selectInput("features", "Features:",
                               c("Age" = "AGE", "BMI", "Serum Potassium Level" = "KLEVEL", "Serum Creatinine (mg/dL)" = "CREAT", "Ejection Fraction Percent" = "EJF_PER"))))
       )
