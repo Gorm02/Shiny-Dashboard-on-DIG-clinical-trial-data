@@ -82,14 +82,16 @@ ui <- dashboardPage(
       tabItem("study_overview",
                 fluidPage(plotOutput("Baseline_Values_plot"),
               box(selectInput("features", "Features:",
-                              c("Age" = "AGE", "BMI", "Serum Potassium Level" = "KLEVEL", "Serum Creatinine (mg/dL)" = "CREAT", "Ejection Fraction Percent" = "EJF_PER"))))
+                              c("Age" = "AGE", "BMI", "Serum Potassium Level" = "KLEVEL", "Serum Creatinine (mg/dL)" = "CREAT", "Ejection Fraction Percent" = "EJF_PER"),
+                              selected = "AGE")))
       ),
       # mortality plot in the new tab key takeaways
       tabItem("takeaway",
               fluidPage(plotOutput("Mortality_Plot"),
                         plotOutput("Hospitalisation_Plot"),
                         selectInput("features", "Features:",
-                              c("WHF", "CVD", "Sex" = "SEX", "History of Hypertension" = "HYPERTEN", "Race" = "RACE")))),
+                              c("WHF", "CVD", "Sex" = "SEX", "History of Hypertension" = "HYPERTEN", "Race" = "RACE"),
+                              selected = "WHF"))),
       
       tabItem("substudies",
               fluidPage(
@@ -100,16 +102,19 @@ ui <- dashboardPage(
       tabItem("cat_base_char",
               box(plotOutput("categorical_baseline_plot")),
               box(selectInput("features", "Features:",
-                                    c("Sex" = "SEX", "History of Hypertension" = "HYPERTEN", "Race" = "RACE")))),
+                              c("Sex" = "SEX", "History of Hypertension" = "HYPERTEN", "Race" = "RACE"),
+                              selected = "Sex"))),
       
       tabItem("cont_death",
               box(plotOutput("continuous_deaths_plot")),
               box(selectInput("features", "Features:",
-                              c("Age" = "AGE", "BMI", "Serum Potassium Level" = "KLEVEL", "Serum Creatinine (mg/dL)" = "CREAT", "Ejection Fraction Percent" = "EJF_PER")))),
+                              c("Age" = "AGE", "BMI", "Serum Potassium Level" = "KLEVEL", "Serum Creatinine (mg/dL)" = "CREAT", "Ejection Fraction Percent" = "EJF_PER"),
+                              selected = "Age"))),
       tabItem("cont_hosp",
               box(plotOutput("continuous_hospitalisations_plot")),
               box(selectInput("features", "Features:",
-                              c("Age" = "AGE", "BMI", "Serum Potassium Level" = "KLEVEL", "Serum Creatinine (mg/dL)" = "CREAT", "Ejection Fraction Percent" = "EJF_PER")))),
+                              c("Age" = "AGE", "BMI", "Serum Potassium Level" = "KLEVEL", "Serum Creatinine (mg/dL)" = "CREAT", "Ejection Fraction Percent" = "EJF_PER"),
+                              selected = "Age"))),
       tabItem("bas_mort",
               box(plotOutput("basic_surv_plot"))),
       
