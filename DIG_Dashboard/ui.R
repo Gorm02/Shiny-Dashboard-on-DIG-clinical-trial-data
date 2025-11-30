@@ -80,11 +80,17 @@ ui <- dashboardPage(
     # input the bodies for the different tabs (above, in menuItem):
     tabItems(
       tabItem("study_overview",
-                fluidPage(plotOutput("Baseline_Values_plot"),
-              box(selectInput("features", "Features:",
+              h2("Study Overview"),
+              h4("Baseline characteristics are the demographic, medical, and other descriptive data collected prior to the study. It's imperitive
+                 to record this information to ensure groups are comparable, identifying potential confounders, or assessing the impact on randomization."),
+                fluidRow(
+                  box(width = 4,title = "Boxplot of Baseline Characteristics", collapsible = T, status = "warning", solidHeader = T, plotOutput("Baseline_Values_plot")),
+              box(width = 2, title = "Select Feature", collapsible = T, status = "warning", solidHeader = T, selectInput("features", "Features:",
                               c("Age" = "AGE", "BMI", "Serum Potassium Level" = "KLEVEL", "Serum Creatinine (mg/dL)" = "CREAT", "Ejection Fraction Percent" = "EJF_PER"),
-                              selected = "AGE")))
-      ),
+                              selected = "AGE"))),
+              box(width = 8, title = "Key Findings", 
+                  "Boxplots were used to visualize the spread of the data between patients assigned to placebo and control. Each feature analysed 
+                  showed relative similarity between groups suggesting the study population is suitable for this trial.")),
       # mortality plot in the new tab key takeaways
       tabItem("takeaway",
               fluidPage(plotOutput("Mortality_Plot"),

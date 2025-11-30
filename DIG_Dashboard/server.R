@@ -172,7 +172,7 @@ server <- function(input, output, session) {
   # Preparing for the interactive survival plot (reactive expression):
   survfit_reactive_model <- reactive({
     f <- as.formula(paste("Surv(Month, DEATH) ~ TRTMT +", input$features))
-     survfit(f, data = survfit.df)
+     return(survfit(f, data = survfit.df))
   })
   
   output$survPlot_main <- renderPlotly({
