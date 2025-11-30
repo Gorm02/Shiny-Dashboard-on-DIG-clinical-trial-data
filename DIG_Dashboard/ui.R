@@ -14,13 +14,16 @@ library(readr)
 library(dplyr)
 library(ggplot2)
 library(bslib)
-
+library(plotly)
 ui <- dashboardPage(
-  dashboardHeader(title = "Digoxin Clinical Trial Interactive Application", titleWidth = 450),
+  dashboardHeader(title = "Digoxin Clinical Trial Interactive Application", titleWidth = 450,
+                  tags$li(class = "dropdown",
+                  tags$img(src = "NUIG.png", height = "40px")
+                  )
+  ),
   
   dashboardSidebar(
     sidebarMenu(
-      
       #To let the user know what tab they have selected.
       
       id = "tabs",
@@ -77,9 +80,9 @@ ui <- dashboardPage(
     # input the bodies for the different tabs (above, in menuItem):
     tabItems(
       tabItem("study_overview",
-              box(plotOutput("Baseline_Values_plot")),
+                fluidPage(plotOutput("Baseline_Values_plot"),
               box(selectInput("features", "Features:",
-                              c("Age" = "AGE", "BMI", "Serum Potassium Level" = "KLEVEL", "Serum Creatinine (mg/dL)" = "CREAT", "Ejection Fraction Percent" = "EJF_PER")))
+                              c("Age" = "AGE", "BMI", "Serum Potassium Level" = "KLEVEL", "Serum Creatinine (mg/dL)" = "CREAT", "Ejection Fraction Percent" = "EJF_PER"))))
       ),
       # mortality plot in the new tab key takeaways
       tabItem("takeaway",
@@ -110,11 +113,11 @@ ui <- dashboardPage(
       tabItem("bas_mort",
               box(plotOutput("basic_surv_plot"))),
       
-      tabItem("interact_surv",
-              box(plotOutput("survPlot")),
-              box(selectInput("features", "Features:",
-                              c("CVD", "WHF"), selected = "CVD")))
-    
+      tabItem("interact_surv",box(
+                width = 12,
+                plotlyOutput("survPlot_main", height = "500px")
+              ),
+              box(selectInput("features", "Features:", c("CVD", "WHF"), selected = "CVD")))
       )
     )
   )

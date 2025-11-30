@@ -14,6 +14,7 @@ library(readr)
 library(dplyr)
 library(ggplot2)
 library(bslib)
+library(plotly)
 
 server <- function(input, output, session) {
   
@@ -170,47 +171,46 @@ server <- function(input, output, session) {
   
   # Preparing for the interactive survival plot (reactive expression):
   survfit_reactive_model <- reactive({
-    formula <- as.formula(paste("Surv(Month, DEATH) ~ TRTMT +", input$features))
-    interact_fit <- survfit(Surv(Month, DEATH) ~ TRTMT + get(input$features), data = survfit.df)
-    interact_fit$surv <- 1 - interact_fit$surv
-    interact_fit$lower <- 1 - interact_fit$lower
-    interact_fit$upper <- 1- interact_fit$upper
-    return(interact_fit)
+    f <- as.formula(paste("Surv(Month, DEATH) ~ TRTMT +", input$features))
+     survfit(f, data = survfit.df)
   })
   
-  
-  # plot this interactively
-  output$survPlot <- renderPlot({
-    plot(survfit_reactive_model(), main = paste("Survival Curve for", input$features), col = 1:2)
-  })
-  
-  # # Interactive mortality plot
-  #  output$interact_surv_plot <- renderPlot({
-  #    ggsurvplot(survfit_reactive_model(),
-  #               pval = TRUE, 
-  #               conf.int = TRUE,
-  #               conf.int.style = "step",
-  #               xlab = "Time in Months",
-  #               ylab = "Risk of Mortality",
-  #               break.time.by = 6,
-  #               risk.table = "abs_pct",
-  #               risk.table.col = "strata",
-  #               risk.table.y.text = FALSE,
-  #               linetype = "strata",
-  #               ncensor.plot = TRUE,
-  #               censor.shape="|",
-  #               censor.size = 3,
-  #              # legend.labs =
-  #              #   c("Placebo + No CVD", "Placebo + CVD", "Treatment + No CVD", "Treatment + CVD"),
-  #               palette =  "Awtools",
-  #               title = "Figure 17: Risk of Mortality Over Time",
-  #               subtitle = "Within each Treatment Group",
-  #               font.title = c(22, "bold", "black"),
-  #               ggtheme = theme_minimal() + theme(plot.title = element_text(hjust = 0.5, face = "bold"))+
-  #               theme(plot.subtitle = element_text(hjust = 0.5, size = 16, face = "italic")),
-  #               risk.table.height = 0.25,
-  #               risk.table.fontsize = 2.0)
-  #    })
+  output$survPlot_main <- renderPlotly({
+    p <- ggsurvplot(
+      survfit_reactive_model(),
+      pval = TRUE,
+      conf.int = TRUE,
+      conf.int.style = "step",
+      xlab = "Time in Months",
+      ylab = "Risk of Mortality",
+      break.time.by = 6,
+      risk.table = "abs_pct",
+      risk.table.col = "strata",
+      risk.table.text = FALSE,
+      linetype = "strata",
+      ncensor.plot = TRUE,
+      censor.shape = "|",
+      censor.size = 3,
+      legend.labs = c(
+        "Placebo + No CVD", 
+        "Placebo + CVD",
+        "Treatment + No CVD", 
+        "Treatment + CVD"
+      ),
+      palette = "Awtools",
+      title = "Figure 17: Risk of Mortality Over Time",
+      subtitle = "Within each Treatment Group",
+      font.title = c(22, "bold", "black"),
+      ggtheme = theme_minimal() +
+        theme(
+          plot.title = element_text(hjust = 0.5, face = "bold"),
+          plot.subtitle = element_text(hjust = 0.5, size = 16, face = "italic")
+        ),
+      risk.table.height = 0.25,
+      risk.table.fontsize = 2.0
+    )
+    ggplotly(p$plot)
+  })  
 }
 
 
