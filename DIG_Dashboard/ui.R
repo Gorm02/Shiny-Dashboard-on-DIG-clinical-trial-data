@@ -86,11 +86,14 @@ ui <- dashboardPage(
                 fluidRow(
                   box(width = 4,title = "Boxplot of Baseline Characteristics", collapsible = T, status = "warning", solidHeader = T, plotOutput("Baseline_Values_plot")),
               box(width = 2, title = "Select Feature", collapsible = T, status = "warning", solidHeader = T, selectInput("features", "Features:",
-                              c("Age" = "AGE", "BMI", "Serum Potassium Level" = "KLEVEL", "Serum Creatinine (mg/dL)" = "CREAT", "Ejection Fraction Percent" = "EJF_PER"),
+                              c("Age" = "AGE", "BMI", "Serum Potassium Level" = "KLEVEL", "Serum Creatinine (mg/dL)" = "CREAT", "Ejection Fraction Percent" = "EJF_PER", "Diastolic Blood Pressure" = "DIABP", "Systolic Blood Pressure" = "SYSBP"),
                               selected = "AGE"))),
               box(width = 8, title = "Key Findings", 
                   "Boxplots were used to visualize the spread of the data between patients assigned to placebo and control. Each feature analysed 
                   showed relative similarity between groups suggesting the study population is suitable for this trial.")),
+      
+      
+      
       # mortality plot in the new tab key takeaways
       tabItem("takeaway",
               fluidPage(plotOutput("Mortality_Plot"),
