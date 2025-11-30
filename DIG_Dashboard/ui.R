@@ -13,12 +13,18 @@ library(shinydashboard)
 library(readr)
 library(dplyr)
 library(ggplot2)
+library(bslib)
 
 ui <- dashboardPage(
   dashboardHeader(title = "Digoxin Clinical Trial Interactive Application", titleWidth = 450),
   
   dashboardSidebar(
     sidebarMenu(
+      
+      #To let the user know what tab they have selected.
+      
+      id = "tabs",
+      
       # use menuItem to make tabs for different components of the study we want to discuss:
       menuItem("Study Overview", tabName = "study_overview", icon = icon("tree")),
       menuItem("Baseline Characteristics", tabName = "cat_base_char", icon = icon("circle")),
@@ -30,10 +36,44 @@ ui <- dashboardPage(
       menuItem("Continuous Hospitalisations", tabName = "cont_hosp", icon = icon("circle")),
       menuItem("Basic Mortality", tabName = "bas_mort", icon = icon("circle")),
       menuItem("Interactive Mortality", tabName = "interact_surv", icon = icon("circle"))
-    )
+    ),
+    
+    textOutput("res")
+    
   ),
+
   
   dashboardBody(
+    # Changes Title Font to Times New Roman (integrated CSS file)
+    tags$head(tags$style(HTML('
+                              .main-header .logo {
+                              font-family: "Georgia", Times, "Times New Roman", serif;
+                              font-weight: bold;
+                              font-size: 22px;
+                              }'
+                              )
+                         )
+              ),
+    
+    # Using custom CSS to change colour of title background identical. (Not sure why but .skin-blue is important here. Might be because of default settings?)
+    tags$head(tags$style(HTML('
+        .skin-blue .main-header .logo {
+          background-color: #66b2b2;
+        }
+        .skin-blue .main-header .logo:hover {
+          background-color: #66b2b2 ; }
+         
+         .skin-blue .main-header .navbar {
+         background-color: #66b2b2;
+         } 
+         .skin-blue .main-header .navbar sidebar-toggle:hover {
+         background-color: #66b2b2:)
+         }'
+        )
+      )
+),
+   
+    
     # input the bodies for the different tabs (above, in menuItem):
     tabItems(
       tabItem("study_overview",

@@ -13,8 +13,14 @@ library(shinydashboard)
 library(readr)
 library(dplyr)
 library(ggplot2)
+library(bslib)
 
 server <- function(input, output, session) {
+  
+  #
+  output$res <- renderText({
+    paste("You've selected:", input$tabs)
+  })
   
   # Popup Model that will display critical information and support information
   
