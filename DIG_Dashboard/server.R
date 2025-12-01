@@ -256,14 +256,27 @@ server <- function(input, output, session) {
   output$trtmt_deaths <- renderPlot({
     ggplot(data = dig.df, aes(x = DEATH, fill = TRTMT)) +
       geom_bar(position = "dodge",
-               alpha = 0.75,
                color = "black") +
-      scale_fill_manual(values = c("seagreen2", "cornflowerblue") ) +
+      scale_fill_manual(values = c("cadetblue1", "firebrick4") ) +
       theme_classic() + 
-      labs(title = "Figure 8: Deaths per Treatment Group",
+      labs(title = "Deaths per Treatment Group",
            x = "Deaths",
            y = "Number of Patients",
            fill = "Treatment Group") +
+      scale_y_continuous(expand = expansion(mult = c(0, 0.05)))
+  })
+  
+  # basic plot showing patient hospitalisations per treatment group
+  output$trtmt_hosps <- renderPlot({
+    ggplot(data = dig.df, aes(x = HOSP, fill = TRTMT)) +
+      geom_bar(position = "dodge",
+               color = "black") +
+      scale_fill_manual(values = c("cadetblue1", "firebrick4") ) +
+      theme_classic() + 
+      labs(title = "Hospitalizations and Treatment Groups",
+           fill = "Treatment Group",
+           x = "Hospitalized during the Trial",
+           y = "Number of Patients") +
       scale_y_continuous(expand = expansion(mult = c(0, 0.05)))
   })
 }

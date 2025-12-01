@@ -99,6 +99,7 @@ ui <- dashboardPage(
                 h4("In the central trial, 1194 (35.1%) of those in the placebo group, and 1181 (38.4%) of those treated with digoxin died during the trial timeline. In other words, patient mortality was not affected by digoxin treatment."),
                 h4("However, in the placebo group, 2282 (67.1%) compared to 2184 (64.3%) patients in the digoxin treatment group were hospitalised throughout the trial period. This in itself was not a major difference, but digoxin treatment decreased hospitalisations more significantly for patients with comorbidities such as worsening heart failure."),
                 box(plotOutput("trtmt_deaths")),
+                box(plotOutput("trtmt_hosps")),
                 h4(em("Interact with the data in the other tabs to see for yourself!"), style = "color: maroon;"),
                 
                 h2("Conclusions"),
