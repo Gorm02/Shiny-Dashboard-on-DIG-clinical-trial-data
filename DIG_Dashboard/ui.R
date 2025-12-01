@@ -80,30 +80,38 @@ ui <- dashboardPage(
     # input the bodies for the different tabs (above, in menuItem):
     tabItems(
       tabItem("study_info",
-
+              box(
                 h2("Study Background"),
-                h4("The digitalis Investigation Group (DIG) study investigated the capacity of the cardiac glycoside, digoxin, to treat systolic heart failure. Glycosides, such as digoxin work by increasing the amount of intracellular sodium retained, enabling the accumulation of intracellular calcium, resulting in stronger cardiac contractions. Despite this known health outcome, at the time of the study it was unknown whether digoxin treatment reduced mortality for patients with heart failure."),
-                
+                h4("The digitalis Investigation Group (DIG) study investigated the capacity of the cardiac glycoside, digoxin, to treat systolic heart failure. Glycosides, such as digoxin work by increasing the amount of intracellular sodium retained, enabling the accumulation of intracellular calcium, resulting in stronger cardiac contractions. Despite this known health outcome, at the time of the study it was unknown whether digoxin treatment reduced mortality for patients with heart failure.")
+              ),
+              box(
                 h2("Study Eligibility"),
                 h4("The main DIG study took place across 302 health centers in Canada and the United states (US) from February of 1991 and September of 1993."),
                 h4("The main trial investigated patients with left ventricular ejection fractions of 45% or less."),
                 h4("In total, 6800 patients were recruited to the main trial and randomised to either digoxin treatment or placebo."),
-                box(plotOutput("trtmt_plot")),
-
+                box(plotOutput("trtmt_plot"))
+              ),
+              
+              box(
                 h4("Patients in the digoxin group were given an initial recommended dose by an algorithm, which took into account the patient’s age, weight, sex and renal function."),
                 h4("The medical practitioners within this study took into account other factors, including the previous dose of digoxin, and adjuvant drugs which could impact digoxin pharmacokinetics, and adjusted digoxin doses accordingly. The average digoxin dose given was 0.25 mg/day."),
-                box(plotlyOutput("predict_dig_dose")),  
+                box(plotlyOutput("predict_dig_dose"))
+              ),
               
+              box(
                 h2("Study Outcomes"),
                 h4("This was the first study to investigate whether digoxin impacted individuals with heart failure’s quality of life (by the number of hospitalisations) and quantity of life (by patient deaths)."),
                 h4("In the central trial, 1194 (35.1%) of those in the placebo group, and 1181 (38.4%) of those treated with digoxin died during the trial timeline. In other words, patient mortality was not affected by digoxin treatment."),
-                h4("However, in the placebo group, 2282 (67.1%) compared to 2184 (64.3%) patients in the digoxin treatment group were hospitalised throughout the trial period. This in itself was not a major difference, but digoxin treatment decreased hospitalisations more significantly for patients with comorbidities such as worsening heart failure."),
                 box(plotOutput("trtmt_deaths")),
-                box(plotOutput("trtmt_hosps")),
+                h4("However, in the placebo group, 2282 (67.1%) compared to 2184 (64.3%) patients in the digoxin treatment group were hospitalised throughout the trial period. This in itself was not a major difference, but digoxin treatment decreased hospitalisations more significantly for patients with comorbidities such as worsening heart failure."),
                 h4(em("Interact with the data in the other tabs to see for yourself!"), style = "color: maroon;"),
-                
+                box(plotOutput("trtmt_hosps"))
+              ),
+              
+              box(
                 h2("Conclusions"),
                 h4("Although digoxin treatment did not reduce patient mortality as a whole, it did decrease the rate of hospitalization. This benefit was increased in patients with worsening heart failure. Therefore, digoxin treatment can be used as a method of improving the quality rather than the quantity of life for patients with chronic heart failure, and especially those with worsening heart failure.")
+              )
               ),
       
       
