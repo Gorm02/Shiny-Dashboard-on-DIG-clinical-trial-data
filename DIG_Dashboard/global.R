@@ -101,7 +101,7 @@ names(q1) <- c("Treatment_Group", "Number_of_Patients", "Proportion_of_Patients"
 # Preparing for the parallel coordinates plot:
 parco.df <- read_csv("DIG.csv",
                      col_names = TRUE,
-                     col_select = c(ID, TRTMT, SEX, AGE, BMI, CREAT, DIGDOSER),
+                     col_select = c(ID, TRTMT, SEX, AGE, BMI, CREAT, DIGDOSER, DIGDOSE),
                      col_types = cols(
                        ID = col_integer(),
                        TRTMT = col_integer(),
@@ -109,7 +109,8 @@ parco.df <- read_csv("DIG.csv",
                        SEX = col_factor(),
                        BMI = col_double(),
                        CREAT = col_double(),
-                       DIGDOSER = col_double()
+                       DIGDOSER = col_double(),
+                       DIGDOSE = col_double()
                      ))
 
 parco.df <- na.omit(parco.df)

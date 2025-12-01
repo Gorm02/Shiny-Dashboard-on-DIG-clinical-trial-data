@@ -212,6 +212,7 @@ server <- function(input, output, session) {
     ggplotly(p$plot)
   })  
   
+  # plot showing number of patients per group
   output$trtmt_plot <- renderPlot({
     ggplot(q1, aes(x = Treatment_Group, y = Number_of_Patients, fill = Treatment_Group)) + 
       geom_col(stat = "identity",
@@ -221,12 +222,13 @@ server <- function(input, output, session) {
       ggtitle("Number of Patients in Each Treatment Group") +
       xlab("Treatment Group") +
       ylab("Number of Patients") +
-      #geom_text(label = q1$Number_of_Patients) +
+      geom_text(label = q1$Number_of_Patients) +
       # to make the columns touch the x-axis:
       scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
       theme_classic()
   })
   
+  # par co plot showing predictors in recommended dig dose
   output$predict_dig_dose <- renderPlotly({
     plot_ly(
       type = "parcoords",
@@ -242,8 +244,9 @@ server <- function(input, output, session) {
         list(range = c(min(parco.df$CREAT), max(parco.df$CREAT)),
              label = "Serum Creatinine (mg/dL)", values = parco.df$CREAT),
         list(range = c(min(parco.df$DIGDOSER), max(parco.df$DIGDOSER)),
-             label = "Recommended Digoxin Dose", values = parco.df$DIGDOSER)
-
+             label = "Recommended Digoxin Dose", values = parco.df$DIGDOSER),
+        list(range = c(min(parco.df$DIGDOSE), max(parco.df$DIGDOSE)),
+             label = "Adjusted Digoxin Dose", values = parco.df$DIGDOSE)
       )
     ) %>%
       layout(title = "Predicting the Digoxin Dose of the Treatment Group")
