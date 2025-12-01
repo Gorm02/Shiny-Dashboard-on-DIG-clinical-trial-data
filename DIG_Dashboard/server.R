@@ -214,7 +214,7 @@ server <- function(input, output, session) {
   
   # plot showing number of patients per group
   output$trtmt_plot <- renderPlot({
-    ggplot(q1, aes(x = Treatment_Group, y = Number_of_Patients, fill = Treatment_Group)) + 
+    ggplot(data = q1, aes(x = Treatment_Group, y = Number_of_Patients, fill = Treatment_Group)) + 
       geom_col(stat = "identity",
                color = "black") +
       scale_fill_manual(values = c("cadetblue1", "firebrick4") ) +
@@ -250,6 +250,21 @@ server <- function(input, output, session) {
       )
     ) %>%
       layout(title = "Predicting the Digoxin Dose of the Treatment Group")
+  })
+  
+  # basic plot showing patient deaths per treatment group
+  output$trtmt_deaths <- renderPlot({
+    ggplot(data = dig.df, aes(x = DEATH, fill = TRTMT)) +
+      geom_bar(position = "dodge",
+               alpha = 0.75,
+               color = "black") +
+      scale_fill_manual(values = c("seagreen2", "cornflowerblue") ) +
+      theme_classic() + 
+      labs(title = "Figure 8: Deaths per Treatment Group",
+           x = "Deaths",
+           y = "Number of Patients",
+           fill = "Treatment Group") +
+      scale_y_continuous(expand = expansion(mult = c(0, 0.05)))
   })
 }
 
