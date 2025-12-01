@@ -211,6 +211,43 @@ server <- function(input, output, session) {
     )
     ggplotly(p$plot)
   })  
+  
+  output$trtmt_plot <- renderPlot({
+    ggplot(q1, aes(x = Treatment_Group, y = Number_of_Patients, fill = Treatment_Group)) + 
+      geom_col(stat = "identity",
+               color = "black") +
+      scale_fill_manual(values = c("cadetblue1", "firebrick4") ) +
+      theme(legend.position="none") +
+      ggtitle("Number of Patients in Each Treatment Group") +
+      xlab("Treatment Group") +
+      ylab("Number of Patients") +
+      #geom_text(label = q1$Number_of_Patients) +
+      # to make the columns touch the x-axis:
+      scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+      theme_classic()
+  })
+  
+  output$predict_dig_dose <- renderPlotly({
+    plot_ly(
+      type = "parcoords",
+      line = list(color = ~ as.numeric(parco.df$SEX),
+                  colorscale = list(c(0,'blue'),c(1,"magenta"))),
+      dimensions = list(
+        list(tickvals = c(1,2), ticktext = c("Male", "Female"),
+             label = "Sex", values = parco.df$SEX),
+        list(range = c(min(parco.df$AGE), max(parco.df$AGE)),
+             label = "Age", values = parco.df$AGE),
+        list(range = c(min(parco.df$BMI), max(parco.df$BMI)),
+             label = "BMI", values = parco.df$BMI),
+        list(range = c(min(parco.df$CREAT), max(parco.df$CREAT)),
+             label = "Serum Creatinine (mg/dL)", values = parco.df$CREAT),
+        list(range = c(min(parco.df$DIGDOSER), max(parco.df$DIGDOSER)),
+             label = "Recommended Digoxin Dose", values = parco.df$DIGDOSER)
+
+      )
+    ) %>%
+      layout(title = "Predicting the Digoxin Dose of the Treatment Group")
+  })
 }
 
 

@@ -1,6 +1,7 @@
 library(tidyverse)
 library("survival")
 library("survminer")
+library("plotly")
 
 dig.df <- read_csv("DIG.csv", 
                    col_names = TRUE, 
@@ -89,12 +90,26 @@ Mort_TRTMT_Fit$upper <- 1 - TRTMT_FIT$lower
 Mort_TRTMT_Fit$lower <- 1 - TRTMT_FIT$upper
 
 
-# # Preparing for the interactive survival plot
-# INTERACT_FIT <- survfit(Surv(Month, DEATH) ~ TRTMT + CVD, data = survfit.df)
-# 
-# # now we need to change it from the probability of surviving to the risk of dying.
-# Mort_INTERACT_Fit <- INTERACT_FIT
-# Mort_INTERACT_Fit$surv <- 1- INTERACT_FIT$surv
-# # flip the confidence interval
-# Mort_INTERACT_Fit$upper <- 1 - INTERACT_FIT$lower
-# Mort_INTERACT_Fit$lower <- 1 - INTERACT_FIT$upper
+# Preparing for the basic plot showing the number of patients per treatment group:
+q1 <- dig.df %>%
+  group_by(TRTMT)%>%
+  summarise(Number_of_Patients = n()) %>%
+  mutate(Proportion_of_Patients = round(Number_of_Patients/sum(Number_of_Patients), 3))
+
+names(q1) <- c("Treatment_Group", "Number_of_Patients", "Proportion_of_Patients")
+
+# Preparing for the parallel coordinates plot:
+parco.df <- read_csv("DIG.csv",
+                     col_names = TRUE,
+                     col_select = c(ID, TRTMT, SEX, AGE, BMI, CREAT, DIGDOSER),
+                     col_types = cols(
+                       ID = col_integer(),
+                       TRTMT = col_integer(),
+                       AGE = col_integer(),
+                       SEX = col_factor(),
+                       BMI = col_double(),
+                       CREAT = col_double(),
+                       DIGDOSER = col_double()
+                     ))
+
+parco.df <- na.omit(parco.df)
