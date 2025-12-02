@@ -266,20 +266,16 @@ server <- function(input, output, session) {
     
     out <- dig.df_complete %>%
       filter(AGE >= input$age[1], AGE <= input$age[2]) %>%
-      filter(SEX == input$sex) %>%
+      filter(SEX %in% input$sex) %>%
       filter(BMI >= input$bmi[1], BMI <= input$bmi[2]) %>%
-      filter(TRTMT == input$TRTMT)
-    
-    print(str(out)) 
-    
-    out
+      filter(TRTMT %in% input$TRTMT)
   })
   
   
-  
+  # Plotly diagram
   output$baseline_plotly <- renderPlotly({
     df <- dig.df_complete1()
-    if (nrow(df) == 0) return(NULL)
+   # if (nrow(df) == 0) return(NULL)
     
     df <- df %>% mutate(across(everything(), as.numeric))
     

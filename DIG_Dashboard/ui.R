@@ -148,8 +148,8 @@ ui <- dashboardPage(
                                min = min(dig.df_complete$BMI), max = max(dig.df_complete$BMI), value = c(min(dig.df_complete$BMI), max(dig.df_complete$BMI))),
                   sliderInput("age", "Select Age Range:",
                               min = 21, max = 90, value = c(30, 50)),
-                  radioButtons("sex", "Sex:", c("Male" = 1, "Female" = 2)),
-                  radioButtons("TRTMT", "Treatment", c("Placebo" = 1, "Treatment" = 2))),
+                  checkboxGroupInput("sex", "Sex:", choices = c("Male" = 1, "Female" = 2), selected = c(1,2)),
+                  checkboxGroupInput("TRTMT", "Treatment", choices =  c("Placebo" = 1, "Treatment" = 2), selected = c(1,2))),
               
               box(width = 8, title = "Key Findings", 
                   "Boxplots were used to visualize the spread of the data between patients assigned to placebo and control. Each feature analysed 
