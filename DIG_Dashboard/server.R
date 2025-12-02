@@ -193,7 +193,7 @@ server <- function(input, output, session) {
       ggtitle("Number of Patients in Each Treatment Group") +
       xlab("Treatment Group") +
       ylab("Number of Patients") +
-      geom_text(label = q1$Number_of_Patients) +
+      #geom_text(label = Number_of_Patients, vjust = -0.5) +
       # to make the columns touch the x-axis:
       scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
       theme_classic()

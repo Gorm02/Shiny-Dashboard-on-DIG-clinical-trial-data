@@ -182,8 +182,7 @@ ui <- dashboardPage(
                               c("Age" = "AGE", "BMI", "Serum Potassium Level" = "KLEVEL", "Serum Creatinine (mg/dL)" = "CREAT", "Ejection Fraction Percent" = "EJF_PER"),
                               selected = "Age"))),
       tabItem("bas_mort",
-              box(plotOutput("basic_surv_plot")),
-              box(plotOutput("trtmt_plot"))
+              box(plotOutput("basic_surv_plot"))
               ),
       
       tabItem("interact_surv",box(
