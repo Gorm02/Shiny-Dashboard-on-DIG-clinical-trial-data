@@ -36,10 +36,7 @@ ui <- dashboardPage(
                menuSubItem("Patient Hospitalisations", tabName = "patient_hospitalisations"),
                menuSubItem("Patient Deaths", tabName = "patient_deaths")
           ),
-      
-      menuItem("Baseline Characteristics", tabName = "cat_base_char", icon = icon("circle")),
-      menuItem("Key Takeaways", icon = icon("book"), tabName = "takeaway", badgeLabel = "Important",
-               badgeColor = "red"),
+      menuItem("Final - Table", tabName = "table", icon = icon("star")),
       menuItem("Continuous Deaths", tabName = "cont_death", icon = icon("circle")),
       menuItem("Continuous Hospitalisations", tabName = "cont_hosp", icon = icon("circle")),
       menuItem("Basic Mortality", tabName = "bas_mort", icon = icon("circle")),
@@ -120,7 +117,7 @@ ui <- dashboardPage(
               box(width = 6,
                 h4("This was the first study to investigate whether digoxin impacted individuals with heart failure’s quality of life (by the number of hospitalisations) and quantity of life (by patient deaths)."),
                 h4("In the central trial, 1194 (35.1%) of those in the placebo group, and 1181 (38.4%) of those treated with digoxin died during the trial timeline. In other words, patient mortality was not affected by digoxin treatment."),
-                box(plotOutput("trtmt_deaths")),
+                box(plotOutput("trtmt_deaths"))
               ),
               box(width = 6,
                 h4("However, in the placebo group, 2282 (67.1%) compared to 2184 (64.3%) patients in the digoxin treatment group were hospitalised throughout the trial period. This in itself was not a major difference, but digoxin treatment decreased hospitalisations more significantly for patients with comorbidities such as worsening heart failure."),
@@ -138,35 +135,37 @@ ui <- dashboardPage(
       tabItem("baseline_characteristics",
               h2("Study Overview"),
               h4("Baseline characteristics are the demographic, medical, and other descriptive data collected prior to the study. It's imperitive
-                 to record this information to ensure groups are comparable, identifying potential confounders, or assessing the impact on randomization."),
+                 to record this information to ensure groups are comparable, identifying potential confounders, or assessing the impact on randomization. Below represents a parallel coordinates plot
+                 visualising each patients baseline characteristic to disern if both groups are comparable. We can see that outside of a few outliers, the consensus
+                 of the population is relative similarity between these characteristics. Feel free to explore the dataset with the sliders shown on this page!"),
                 fluidRow(
-                 box(width = 4,title = "Boxplot of Baseline Characteristics", collapsible = T, status = "warning", solidHeader = T, plotOutput("Baseline_Values_plot")),
-              box(width = 2, title = "Select Feature", collapsible = T, status = "warning", solidHeader = T, selectInput("features", "Features:",
-                              c("Age" = "AGE", "BMI", "Serum Potassium Level" = "KLEVEL", "Serum Creatinine (mg/dL)" = "CREAT", "Ejection Fraction Percent" = "EJF_PER", "Diastolic Blood Pressure" = "DIABP", "Systolic Blood Pressure" = "SYSBP"),
-                              selected = "AGE"))),
+                  
               # Baseline Plotly
-              box(width = 4, title = "Interactive plot comparing baseline characteristics between gender and treatment group", collapsible = T, status = "warning", solidHeader = T,
+              box(width = 8, title = "Interactive plot comparing baseline characteristics between gender and treatment group", collapsible = T, status = "warning", solidHeader = T,
                   plotlyOutput("baseline_plotly")),
+              box(width = 4, title = "Select Charactertistic", collapsible = T, status = "warning", solidHeader = T,
+                  sliderInput("bmi", "Body Mass index:",
+                               min = min(dig.df_complete$BMI), max = max(dig.df_complete$BMI), value = c(14.445, 62.664)),
+                  sliderInput("age", "Select Age Range:",
+                              min = 21, max = 90, value = c(21, 90)),
+                  radioButtons("sex", "Sex:", c("Male" = "Male", "Female" = "Female")),
+                  radioButtons("TRTMT", "Treatment", c("Placebo" = "PPlacebo", "Treatment" = "Treatment"))),
+              
               box(width = 8, title = "Key Findings", 
                   "Boxplots were used to visualize the spread of the data between patients assigned to placebo and control. Each feature analysed 
-                  showed relative similarity between groups suggesting the study population is suitable for this trial.")),
+                  showed relative similarity between groups suggesting the study population is suitable for this trial."))
+      ),
       
-      
+      tabItem("table",
+              dataTableOutput("table")),
       
       # mortality plot in the new tab key takeaways
-      tabItem("takeaway",
+      tabItem("patient_hospitalisations",
               fluidPage(plotOutput("Mortality_Plot"),
                         plotOutput("Hospitalisation_Plot"),
                         selectInput("features", "Features:",
                               c("WHF", "CVD", "Sex" = "SEX", "History of Hypertension" = "HYPERTEN", "Race" = "RACE"),
                               selected = "WHF"))),
-      
-      
-      tabItem("cat_base_char",
-              box(plotOutput("categorical_baseline_plot")),
-              box(selectInput("features", "Features:",
-                              c("Sex" = "SEX", "History of Hypertension" = "HYPERTEN", "Race" = "RACE"),
-                              selected = "Sex"))),
       
       tabItem("cont_death",
               box(plotOutput("continuous_deaths_plot")),

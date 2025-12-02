@@ -121,3 +121,4 @@ parco.df <- na.omit(parco.df)
 dig.df_complete <- na.omit(dig.df)
 dig.df_complete$TRTMT <- as.numeric(factor(dig.df_complete$TRTMT))
 dig.df_complete$SEX <- as.numeric(factor(dig.df_complete$SEX))
+

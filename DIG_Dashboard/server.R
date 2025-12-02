@@ -37,36 +37,12 @@ server <- function(input, output, session) {
    }
   )
   
-  # CONTINUOUS BASELINE
-  # Boxplot of continuous baseline characteristics
+
   
-  output$Baseline_Values_plot <- renderPlot({
-    ggplot(data = dig.df, aes(x = TRTMT, y = .data[[input$features]], fill = TRTMT)) +
-      geom_boxplot() +
-      scale_fill_manual(values=c("cadetblue1", "firebrick4")) +
-      geom_jitter(alpha = 0.1) +
-      labs(title = paste("Figure 1: Patient ", input$features, " in Each Treatment Group"),
-           x = "Treatment Group",
-           y = input$features,
-           fill = "Treatment Group") +
-      theme_minimal()
-  })
-  
-  # CATEGORICAL BASELINE
-  # Barplot of categorical baseline characteristics
-  output$categorical_baseline_plot <- renderPlot({
-    ggplot(data = dig.df[!is.na(dig.df[[input$features]]), ], aes(x = .data[[input$features]], fill = TRTMT)) +
-      geom_bar(position = "dodge",
-               alpha = 0.75,
-               colour = "black") +
-      #      facet_wrap(~TRTMT) +
-      scale_fill_manual(values = c("yellow", "purple") ) +
-      theme_bw() + 
-      labs(title = paste("Baseline ", input$feature, " in Each Treatment Group"),
-           fill = "Treatment Group",
-           x = input$features,
-           y = "Number of Patients") +
-      scale_y_continuous(expand = expansion(mult = c(0, 0.05)))
+ 
+# Table Output
+  output$table <- renderDataTable({
+    dig.df
   })
   
   # CATEGORICAL DEATHS
@@ -79,7 +55,9 @@ server <- function(input, output, session) {
                colour = "black") +
       facet_wrap(~TRTMT) +
       scale_fill_manual(values = c("pink", "maroon") ) +
-      theme_bw() + 
+      theme(axis.line = element_line(colour = "black"), 
+            axis.text = element_text(size = 12),
+            axis.title = element_text(face = "bold", size = 14)) + 
       labs(title = paste(input$features, " and Deaths in Each Treatment Group"),
            fill = "Patient Mortality",
            x = input$features,
@@ -97,7 +75,9 @@ server <- function(input, output, session) {
                colour = "black") +
       facet_wrap(~TRTMT) +
       scale_fill_manual(values = c("lightgrey", "blue") ) +
-      theme_bw() + 
+      theme(axis.line = element_line(colour = "black"), 
+            axis.text = element_text(size = 12),
+            axis.title = element_text(face = "bold", size = 14)) + 
       labs(title = paste(input$features, " and Hospitalisations in Each Treatment Group"),
            fill = "Patient Hospitalisations",
            x = input$features,
@@ -274,9 +254,13 @@ server <- function(input, output, session) {
   # Baseline characteristics plot in subtab "Baseline characteristics
   
   output$baseline_plotly <- renderPlotly({
+    
+    
     plot_ly(
+      
+ 
       type = 'parcoords',
-      line = list(color = dig.df_complete$SEX,
+      line = list(color = dig.df_complete$TRTMT,
                   colorscale = list(c(0, 'blue'), c(1, 'pink'))
       ),
       dimensions = list(
@@ -305,6 +289,9 @@ server <- function(input, output, session) {
       )
     )
   })
+  
+  
+
 }
 
 
