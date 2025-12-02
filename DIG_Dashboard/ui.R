@@ -31,10 +31,12 @@ ui <- dashboardPage(
       # use menuItem to make tabs for different components of the study we want to discuss:
       menuItem("Final - Study Information", icon = icon("th"), tabName = "study_info", badgeLabel = "new",
                badgeColor = "green"),
-      menuItem("Final - Baseline Characteristics", tabname = "base_char", icon = icon("star")),
-      menuItem("Final - Patient Hosipitalisations", tabname = "pat_hosp", icon = icon("star")),
-      menuItem("Final - Patient Deaths", tabname = "pat_death", icon = icon("star")),
-      menuItem("Study Overview", tabName = "study_overview", icon = icon("tree")),
+      menuItem("Final - Graphs", tabname = "Graphs", icon = icon("star"),
+               menuSubItem("Baseline Characteristics", tabName = "baseline_characteristics"),
+               menuSubItem("Patient Hospitalisations", tabName = "patient_hospitalisations"),
+               menuSubItem("Patient Deaths", tabName = "patient_deaths")
+          ),
+      
       menuItem("Baseline Characteristics", tabName = "cat_base_char", icon = icon("circle")),
       menuItem("Key Takeaways", icon = icon("book"), tabName = "takeaway", badgeLabel = "Important",
                badgeColor = "red"),
@@ -50,6 +52,17 @@ ui <- dashboardPage(
 
   
   dashboardBody(
+    #test for sidebar
+    tags$head(
+      tags$style(HTML(".sidebar {
+                      height: 90vh; overflow-y: auto;
+                    }"
+      )       
+      )            
+    ),             
+    
+    
+    
     # Changes Title Font to Times New Roman (integrated CSS file)
     tags$head(tags$style(HTML('
                               .main-header .logo {
@@ -122,15 +135,18 @@ ui <- dashboardPage(
               ),
       
       
-      tabItem("study_overview",
+      tabItem("baseline_characteristics",
               h2("Study Overview"),
               h4("Baseline characteristics are the demographic, medical, and other descriptive data collected prior to the study. It's imperitive
                  to record this information to ensure groups are comparable, identifying potential confounders, or assessing the impact on randomization."),
                 fluidRow(
-                  box(width = 4,title = "Boxplot of Baseline Characteristics", collapsible = T, status = "warning", solidHeader = T, plotOutput("Baseline_Values_plot")),
+                 box(width = 4,title = "Boxplot of Baseline Characteristics", collapsible = T, status = "warning", solidHeader = T, plotOutput("Baseline_Values_plot")),
               box(width = 2, title = "Select Feature", collapsible = T, status = "warning", solidHeader = T, selectInput("features", "Features:",
                               c("Age" = "AGE", "BMI", "Serum Potassium Level" = "KLEVEL", "Serum Creatinine (mg/dL)" = "CREAT", "Ejection Fraction Percent" = "EJF_PER", "Diastolic Blood Pressure" = "DIABP", "Systolic Blood Pressure" = "SYSBP"),
                               selected = "AGE"))),
+              # Baseline Plotly
+              box(width = 4, title = "Interactive plot comparing baseline characteristics between gender and treatment group", collapsible = T, status = "warning", solidHeader = T,
+                  plotlyOutput("baseline_plotly")),
               box(width = 8, title = "Key Findings", 
                   "Boxplots were used to visualize the spread of the data between patients assigned to placebo and control. Each feature analysed 
                   showed relative similarity between groups suggesting the study population is suitable for this trial.")),
@@ -164,7 +180,7 @@ ui <- dashboardPage(
                               selected = "Age"))),
       tabItem("bas_mort",
               box(plotOutput("basic_surv_plot")),
-             # box(plotOutput("trtmt_plot"))
+              box(plotOutput("trtmt_plot"))
               ),
       
       tabItem("interact_surv",box(
@@ -173,7 +189,7 @@ ui <- dashboardPage(
               ),
               box(selectInput("features", "Features:", c("CVD", "WHF"), selected = "CVD")))
       )
-    )
   )
+)
 
 

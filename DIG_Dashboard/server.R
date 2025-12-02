@@ -1,13 +1,4 @@
-#
-# This is the server logic of a Shiny web application. You can run the
-# application by clicking 'Run App' above.
-#
-# Find out more about building applications with Shiny here:
-#
-#    https://shiny.posit.co/
-#
 
-## app.R ##
 library(shiny)
 library(shinydashboard)
 library(readr)
@@ -18,7 +9,7 @@ library(plotly)
 
 server <- function(input, output, session) {
   
-  #
+  # Text notifying user which tab they have selected.
   output$res <- renderText({
     paste("You've selected:", input$tabs)
   })
@@ -278,6 +269,41 @@ server <- function(input, output, session) {
            x = "Hospitalized during the Trial",
            y = "Number of Patients") +
       scale_y_continuous(expand = expansion(mult = c(0, 0.05)))
+  })
+  
+  # Baseline characteristics plot in subtab "Baseline characteristics
+  
+  output$baseline_plotly <- renderPlotly({
+    plot_ly(
+      type = 'parcoords',
+      line = list(color = dig.df_complete$SEX,
+                  colorscale = list(c(0, 'blue'), c(1, 'pink'))
+      ),
+      dimensions = list(
+        list(tickvals = c(1,2), ticktext = c("Placebo", "Treatment"),
+             label = 'Treatment', values = dig.df_complete$TRTMT),
+        list(range = c(min(dig.df_complete$AGE), max(dig.df_complete$AGE)),
+             label = 'Age', values = dig.df_complete$AGE),
+        
+        list(range = c(min(dig.df_complete$BMI), max(dig.df_complete$BMI)),
+             label = 'BMI', values = dig.df_complete$BMI),
+        
+        list(range = c(min(dig.df_complete$KLEVEL), max(dig.df_complete$KLEVEL)),
+             label = 'KLEVEL', values = dig.df_complete$KLEVEL),
+        
+        list(range = c(min(dig.df_complete$CREAT), max(dig.df_complete$CREAT)),
+             label = 'CREAT', values = dig.df_complete$CREAT),
+        
+        list(range = c(min(dig.df_complete$DIABP), max(dig.df_complete$DIABP)),
+             label = 'DIABP', values = dig.df_complete$DIABP),
+        
+        list(range = c(min(dig.df_complete$SYSBP), max(dig.df_complete$SYSBP)),
+             label = 'SYSBP', values = dig.df_complete$SYSBP),
+        list(tickvals = c(0, 1), ticktext = c('Female', 'Male'),
+             label = 'Sex', values = dig.df_complete$SEX)
+        
+      )
+    )
   })
 }
 
