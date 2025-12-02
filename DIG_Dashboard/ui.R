@@ -161,11 +161,15 @@ ui <- dashboardPage(
       
       # mortality plot in the new tab key takeaways
       tabItem("patient_hospitalisations",
-              fluidPage(plotOutput("Mortality_Plot"),
-                        plotOutput("Hospitalisation_Plot"),
-                        selectInput("features", "Features:",
-                              c("WHF", "CVD", "Sex" = "SEX", "History of Hypertension" = "HYPERTEN", "Race" = "RACE"),
-                              selected = "WHF"))),
+              fluidPage(
+                box(width = 8, title = "Mortality plot", collapsible = T, status = "warning", solidHeader = T,
+                    plotOutput("Mortality_Plot")),
+                box(width = 4, title = "Select Feature:", collapsible = T, status = "warning", solidHeader = T,
+                    selectInput("features", "Features:",
+                                c("WHF", "CVD", "Sex" = "SEX", "History of Hypertension" = "HYPERTEN", "Race" = "RACE"),
+                                selected = "WHF")),
+                box(width = 8, title = "Mortality plot 2", collapsible = T, status = "warning", solidHeader = T,
+                        plotOutput("Hospitalisation_Plot")))),
       
       tabItem("cont_death",
               box(plotOutput("continuous_deaths_plot")),
