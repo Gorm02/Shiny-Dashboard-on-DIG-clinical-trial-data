@@ -74,10 +74,13 @@ dig.df <- dig.df %>%
 
 # Data for the survfit functionS:
 survfit.df <- dig.df %>%
-  mutate(DEATH  = case_when(
-    DEATH == "Alive" ~ 0,
-    DEATH == "Death" ~ 1
-  ))
+  mutate(
+    DEATH = ifelse(DEATH == "Death", 1, 0)   # everything else → 0
+  )
+# PCP PLOT 
+dig.df_complete <- na.omit(dig.df)
+dig.df_complete$TRTMT <- as.numeric(factor(dig.df_complete$TRTMT))
+dig.df_complete$SEX <- as.numeric(factor(dig.df_complete$SEX))
 
 # Preparing for the basic survival plot
 TRTMT_FIT <- survfit(Surv(Month, DEATH) ~ TRTMT, data = survfit.df)

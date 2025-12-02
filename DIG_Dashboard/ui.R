@@ -37,7 +37,6 @@ ui <- dashboardPage(
                menuSubItem("Patient Deaths", tabName = "patient_deaths")
           ),
       menuItem("Final - Table", tabName = "table", icon = icon("star")),
-      menuItem("Continuous Deaths", tabName = "cont_death", icon = icon("circle")),
       menuItem("Continuous Hospitalisations", tabName = "cont_hosp", icon = icon("circle")),
       menuItem("Basic Mortality", tabName = "bas_mort", icon = icon("circle")),
       menuItem("Interactive Mortality", tabName = "interact_surv", icon = icon("circle"))
@@ -93,6 +92,7 @@ ui <- dashboardPage(
     # input the bodies for the different tabs (above, in menuItem):
     tabItems(
       tabItem("study_info",
+              fluidPage(
               box( width = 12,
                 h2("Study Background"),
                 h4("The digitalis Investigation Group (DIG) study investigated the capacity of the cardiac glycoside, digoxin, to treat systolic heart failure. Glycosides, such as digoxin work by increasing the amount of intracellular sodium retained, enabling the accumulation of intracellular calcium, resulting in stronger cardiac contractions. Despite this known health outcome, at the time of the study it was unknown whether digoxin treatment reduced mortality for patients with heart failure.")
@@ -129,7 +129,7 @@ ui <- dashboardPage(
                 h2("Conclusions"),
                 h4("Although digoxin treatment did not reduce patient mortality as a whole, it did decrease the rate of hospitalization. This benefit was increased in patients with worsening heart failure. Therefore, digoxin treatment can be used as a method of improving the quality rather than the quantity of life for patients with chronic heart failure, and especially those with worsening heart failure.")
               )
-              ),
+              )),
       
       
       tabItem("baseline_characteristics",
@@ -162,6 +162,9 @@ ui <- dashboardPage(
       # mortality plot in the new tab key takeaways. 
       tabItem("patient_hospitalisations",
               fluidPage(
+                h2("Comparing number of hospitalisations and deaths across different factors"),
+                h4("This tab is dedicated to visualising the effect features such as worsening heart failure, history of cardiovascular disease, history of hypertension, and race
+                   have on the number of hospitalisations and deaths. Select a feature to view relevent bar charts."),
                 box(width = 8, title = "Mortality plot", collapsible = T, status = "warning", solidHeader = T,
                     plotOutput("Mortality_Plot")),
                 box(width = 4, title = "Select Feature:", collapsible = T, status = "warning", solidHeader = T,
@@ -169,13 +172,26 @@ ui <- dashboardPage(
                                 c("WHF", "CVD", "Sex" = "SEX", "History of Hypertension" = "HYPERTEN", "Race" = "RACE"),
                                 selected = "WHF")),
                 box(width = 8, title = "Mortality plot 2", collapsible = T, status = "warning", solidHeader = T,
-                        plotOutput("Hospitalisation_Plot")))),
+                        plotOutput("Hospitalisation_Plot")),
+                box(width = 12, title = "Key Insights",collapsible = F,
+                    h4("Looking at prior history to cardiovascular disease, the presence of prior CVD did not significantly affect mortality rates within either the placebo or treatment groups.
+                    In the placebo group, patients without a history of CVD showed a slightly lower proportion of deaths compared to those with CVD.
+                    In contrast, within the treatment group, mortality appeared marginally higher among those without a CVD history,
+                    suggesting only minor variation and no clear treatment-related effect.
+                    The placebo group had a slightly higher proportion of hospitalizations compared to the treatment group. Conversely, the treatment group had a slightly higher
+                    proportion of patients who were not hospitalized. This suggests that Digoxin potentially may reduce the risk of hospitalization. Between both treatment and placebo groups, worsening heart failure (WHF) is 100% correlated with the number of hospitalizations.
+                    Patients who did not experience WHF showed slight variation in the percentage of hospitalizations in this study, suggesting that WHF is the key attributing factor to the number of hospitalizations in this study. 
+                       Finally, both race and sex seem to have no effect on hospitalisations or death.")))),
       
-      tabItem("cont_death",
-              box(plotOutput("continuous_deaths_plot")),
-              box(selectInput("features", "Features:",
-                              c("Age" = "AGE", "BMI", "Serum Potassium Level" = "KLEVEL", "Serum Creatinine (mg/dL)" = "CREAT", "Ejection Fraction Percent" = "EJF_PER"),
-                              selected = "Age"))),
+      tabItem("patient_deaths",
+              fluidPage(
+                box(width = 8, title = "Mortality Plot", collapsible = T, status = "warning", solidHeader = T,
+                    radioButtons("mort_op", "Select your factor:", c("Worsening Heart Failure" = "WHF","History of Cardiovascular Disease"= "CVD")),
+                    plotlyOutput("surv_plotly"),
+                    )
+              )),
+      
+     
       tabItem("cont_hosp",
               box(plotOutput("continuous_hospitalisations_plot")),
               box(selectInput("features", "Features:",
@@ -189,7 +205,7 @@ ui <- dashboardPage(
                 width = 12,
                 plotlyOutput("survPlot_main", height = "500px")
               ),
-              box(selectInput("features", "Features:", c("CVD", "WHF"), selected = "CVD")))
+              box(selectInput("featuresmort", "Features:", c("CVD", "WHF"), selected = "CVD")))
       )
   )
 )
