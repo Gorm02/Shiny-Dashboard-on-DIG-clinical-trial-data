@@ -117,12 +117,12 @@ ui <- dashboardPage(
               box(width = 6,
                 h4("This was the first study to investigate whether digoxin impacted individuals with heart failure’s quality of life (by the number of hospitalisations) and quantity of life (by patient deaths)."),
                 h4("In the central trial, 1194 (35.1%) of those in the placebo group, and 1181 (38.4%) of those treated with digoxin died during the trial timeline. In other words, patient mortality was not affected by digoxin treatment."),
-                box(plotOutput("trtmt_deaths"))
+                box(width = 12, plotOutput("trtmt_deaths"))
               ),
               box(width = 6,
                 h4("However, in the placebo group, 2282 (67.1%) compared to 2184 (64.3%) patients in the digoxin treatment group were hospitalised throughout the trial period. This in itself was not a major difference, but digoxin treatment decreased hospitalisations more significantly for patients with comorbidities such as worsening heart failure."),
                 h4(em("Interact with the data in the other tabs to see for yourself!"), style = "color: maroon;"),
-                box(plotOutput("trtmt_hosps"))
+                box(width = 12, plotOutput("trtmt_hosps"))
               ),
               
               box(width = 12,

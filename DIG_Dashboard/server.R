@@ -85,7 +85,19 @@ server <- function(input, output, session) {
       scale_y_continuous(expand = expansion(mult = c(0, 0.05)))
   })
   
- 
+  # CONTINUOUS DEATHS
+  output$continuous_deaths_plot <- renderPlot({
+    ggplot(data = dig.df, aes(x = DEATH, y = .data[[input$features]], fill = DEATH)) +
+      geom_boxplot() +
+      facet_wrap(~TRTMT) +
+      scale_fill_manual(values=c("pink", "maroon") ) +
+      geom_jitter(alpha = 0.1) +
+      labs(title = paste("Figure 1: Patient Mortality in Each Treatment Group by ", input$features),
+           x = "Treatment Group",
+           y = input$features,
+           fill = "Treatment Group") +
+      theme_minimal()
+  })
   # CONTINUOUS HOSPITALISATIONS
   output$continuous_hospitalisations_plot <- renderPlot({
     ggplot(data = dig.df, aes(x = HOSP, y = .data[[input$features]], fill = DEATH)) +
@@ -128,13 +140,15 @@ server <- function(input, output, session) {
                risk.table.fontsize = 3.0)
   })
   
-
-
-
+  # Preparing for the interactive survival plot (reactive expression):
+  survfit_reactive_model <- reactive({
+    f <- as.formula(paste("Surv(Month, DEATH) ~ TRTMT +", input$features))
+     return(survfit(f, data = survfit.df))
+  })
+  
   output$survPlot_main <- renderPlotly({
     p <- ggsurvplot(
-      fit,
-      data = survfit.df,
+      survfit_reactive_model(),
       pval = TRUE,
       conf.int = TRUE,
       conf.int.style = "step",
@@ -166,7 +180,7 @@ server <- function(input, output, session) {
       risk.table.height = 0.25,
       risk.table.fontsize = 2.0
     )
-    plot_ly(p)
+    ggplotly(p$plot)
   })  
   
   # plot showing number of patients per group
@@ -237,78 +251,46 @@ server <- function(input, output, session) {
       scale_y_continuous(expand = expansion(mult = c(0, 0.05)))
   })
   
-  
-  
   # Baseline characteristics plot in subtab "Baseline characteristics
-
   
-  # Create numeric encoding for categorical variables
-  base_sub <- reactive({
-    dig.df_complete %>%
-      filter(AGE >= input$AGE[1] & AGE <= input$AGE[2]) %>%
-      filter(SEX == input$sex) %>%
-      filter(BMI >= input$bmi[1] & BMI <= input$bmi[2]) %>%
-      mutate(
-        sex_num = ifelse(SEX == "Male", 0, 1),
-        TRTMT_num = ifelse(TRTMT == "Placebo", 0, 1)
-      )
-  })
-  
+  output$baseline_plotly <- renderPlotly({
     
-    output$baseline_plotly <- renderPlotly({
+    
+    plot_ly(
       
-      # Create the plot
-      plot_ly(
-        type = 'parcoords',
-        line = list(color = dig.df_complete$SEX,
-                    colorscale = list(c(0, 'blue'), c(1, 'pink'))),
-        dimensions = list(
-          list(tickvals = c(1,2), ticktext = c("Placebo", "Treatment"),
-               label = 'Treatment', values = dig.df_complete$TRTMT),
-          list(range = c(min(dig.df_complete$AGE), max(dig.df_complete$AGE)),
-               label = 'Age', values = dig.df_complete$AGE),
-          
-          list(range = c(min(dig.df_complete$BMI), max(dig.df_complete$BMI)),
-               label = 'BMI', values = dig.df_complete$BMI),
-          
-          list(range = c(min(dig.df_complete$KLEVEL), max(dig.df_complete$KLEVEL)),
-               label = 'KLEVEL', values = dig.df_complete$KLEVEL),
-          
-          list(range = c(min(dig.df_complete$CREAT), max(dig.df_complete$CREAT)),
-               label = 'CREAT', values = dig.df_complete$CREAT),
-          
-          list(range = c(min(dig.df_complete$DIABP), max(dig.df_complete$DIABP)),
-               label = 'DIABP', values = dig.df_complete$DIABP),
-          
-          list(range = c(min(dig.df_complete$SYSBP), max(dig.df_complete$SYSBP)),
-               label = 'SYSBP', values = dig.df_complete$SYSBP),
-          list(tickvals = c(0, 1), ticktext = c('Female', 'Male'),
-               label = 'Sex', values = dig.df_complete$SEX)))
-    })
-    
-    
-    
-  mortality_react <- reactive({
-    fit <- survfit(Surv(Month, DEATH) ~ TRTMT, data = dig.df)
-})
-
-# Risk of Mortality 
-  output$surv_plotly <- renderPlotly({
-    plot(fit,
-         col = c("blue", "red"),          
-         lty = 1:2,                      
-         xlab = "Time (Months)",          
-         ylab = "Cumulative Death Probability",   
-         main = "Mortality Curve by Treatment"
-    )
-    
-    legend("topleft",
-           legend = levels(dig.df$TRTMT),
-           col = c("blue", "red"),
-           lty = 1:2,
-           title = "Treatment"
+ 
+      type = 'parcoords',
+      line = list(color = dig.df_complete$TRTMT,
+                  colorscale = list(c(0, 'lightblue'), c(1, 'darkred'))
+      ),
+      dimensions = list(
+        list(tickvals = c(1,2), ticktext = c("Placebo", "Treatment"),
+             label = 'Treatment', values = dig.df_complete$TRTMT),
+        list(range = c(min(dig.df_complete$AGE), max(dig.df_complete$AGE)),
+             label = 'Age', values = dig.df_complete$AGE),
+        
+        list(range = c(min(dig.df_complete$BMI), max(dig.df_complete$BMI)),
+             label = 'BMI', values = dig.df_complete$BMI),
+        
+        list(range = c(min(dig.df_complete$KLEVEL), max(dig.df_complete$KLEVEL)),
+             label = 'KLEVEL', values = dig.df_complete$KLEVEL),
+        
+        list(range = c(min(dig.df_complete$CREAT), max(dig.df_complete$CREAT)),
+             label = 'CREAT', values = dig.df_complete$CREAT),
+        
+        list(range = c(min(dig.df_complete$DIABP), max(dig.df_complete$DIABP)),
+             label = 'DIABP', values = dig.df_complete$DIABP),
+        
+        list(range = c(min(dig.df_complete$SYSBP), max(dig.df_complete$SYSBP)),
+             label = 'SYSBP', values = dig.df_complete$SYSBP),
+        list(tickvals = c(0, 1), ticktext = c('Female', 'Male'),
+             label = 'Sex', values = dig.df_complete$SEX)
+        
+      )
     )
   })
+  
+  
 
 }
 
