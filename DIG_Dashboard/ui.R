@@ -159,7 +159,7 @@ ui <- dashboardPage(
       tabItem("table",
               dataTableOutput("table")),
       
-      # mortality plot in the new tab key takeaways
+      # mortality plot in the new tab key takeaways. 
       tabItem("patient_hospitalisations",
               fluidPage(
                 box(width = 8, title = "Mortality plot", collapsible = T, status = "warning", solidHeader = T,
