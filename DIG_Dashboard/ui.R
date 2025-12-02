@@ -145,11 +145,11 @@ ui <- dashboardPage(
                   plotlyOutput("baseline_plotly")),
               box(width = 4, title = "Select Charactertistic", collapsible = T, status = "warning", solidHeader = T,
                   sliderInput("bmi", "Body Mass index:",
-                               min = min(dig.df_complete$BMI), max = max(dig.df_complete$BMI), value = c(14.445, 62.664)),
+                               min = min(dig.df_complete$BMI), max = max(dig.df_complete$BMI), value = c(min(dig.df_complete$BMI), max(dig.df_complete$BMI))),
                   sliderInput("age", "Select Age Range:",
-                              min = 21, max = 90, value = c(21, 90)),
-                  radioButtons("sex", "Sex:", c("Male" = "Male", "Female" = "Female")),
-                  radioButtons("TRTMT", "Treatment", c("Placebo" = "PPlacebo", "Treatment" = "Treatment"))),
+                              min = 21, max = 90, value = c(30, 50)),
+                  radioButtons("sex", "Sex:", c("Male" = 1, "Female" = 2)),
+                  radioButtons("TRTMT", "Treatment", c("Placebo" = 1, "Treatment" = 2))),
               
               box(width = 8, title = "Key Findings", 
                   "Boxplots were used to visualize the spread of the data between patients assigned to placebo and control. Each feature analysed 

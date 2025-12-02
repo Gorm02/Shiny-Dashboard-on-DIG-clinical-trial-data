@@ -147,8 +147,12 @@ server <- function(input, output, session) {
   })
   
   output$survPlot_main <- renderPlotly({
+
     p <- ggsurvplot(
       survfit_reactive_model(),
+
+    ggsurvplot(
+      fit,
       pval = TRUE,
       conf.int = TRUE,
       conf.int.style = "step",
@@ -178,9 +182,12 @@ server <- function(input, output, session) {
           plot.subtitle = element_text(hjust = 0.5, size = 16, face = "italic")
         ),
       risk.table.height = 0.25,
-      risk.table.fontsize = 2.0
-    )
-    ggplotly(p$plot)
+      risk.table.fontsize = 2.0,
+
+    ggplotly(p$plot)))
+
+  
+
   })  
   
   # plot showing number of patients per group
@@ -253,40 +260,71 @@ server <- function(input, output, session) {
   
   # Baseline characteristics plot in subtab "Baseline characteristics
   
-  output$baseline_plotly <- renderPlotly({
+  dig.df_complete1 <- reactive({
     
+    req(input$age, input$sex, input$bmi, input$TRTMT)
+    
+    out <- dig.df_complete %>%
+      filter(AGE >= input$age[1], AGE <= input$age[2]) %>%
+      filter(SEX == input$sex) %>%
+      filter(BMI >= input$bmi[1], BMI <= input$bmi[2]) %>%
+      filter(TRTMT == input$TRTMT)
+    
+    print(str(out)) 
+    
+    out
+  })
+  
+  
+  
+  output$baseline_plotly <- renderPlotly({
+    df <- dig.df_complete1()
+    if (nrow(df) == 0) return(NULL)
+    
+    df <- df %>% mutate(across(everything(), as.numeric))
     
     plot_ly(
-      
- 
-      type = 'parcoords',
-      line = list(color = dig.df_complete$TRTMT,
-                  colorscale = list(c(0, 'lightblue'), c(1, 'darkred'))
+      type = "parcoords",
+      line = list(
+        color = df$TRTMT,
+        colorscale = list(
+          list(0, "pink"),
+          list(1, "blue")
+        )
       ),
       dimensions = list(
-        list(tickvals = c(1,2), ticktext = c("Placebo", "Treatment"),
-             label = 'Treatment', values = dig.df_complete$TRTMT),
-        list(range = c(min(dig.df_complete$AGE), max(dig.df_complete$AGE)),
-             label = 'Age', values = dig.df_complete$AGE),
-        
-        list(range = c(min(dig.df_complete$BMI), max(dig.df_complete$BMI)),
-             label = 'BMI', values = dig.df_complete$BMI),
-        
-        list(range = c(min(dig.df_complete$KLEVEL), max(dig.df_complete$KLEVEL)),
-             label = 'KLEVEL', values = dig.df_complete$KLEVEL),
-        
-        list(range = c(min(dig.df_complete$CREAT), max(dig.df_complete$CREAT)),
-             label = 'CREAT', values = dig.df_complete$CREAT),
-        
-        list(range = c(min(dig.df_complete$DIABP), max(dig.df_complete$DIABP)),
-             label = 'DIABP', values = dig.df_complete$DIABP),
-        
-        list(range = c(min(dig.df_complete$SYSBP), max(dig.df_complete$SYSBP)),
-             label = 'SYSBP', values = dig.df_complete$SYSBP),
-        list(tickvals = c(0, 1), ticktext = c('Female', 'Male'),
-             label = 'Sex', values = dig.df_complete$SEX)
-        
+        list(range = range(df$AGE),values = df$AGE,label = "Age"),
+        list(range = range(df$BMI),values = df$BMI,label = "BMI"),
+        list(range = range(df$KLEVEL),values = df$KLEVEL,label = "KLEVEL"),
+        list(range = range(df$CREAT),values = df$CREAT,label = "Creatinine"),
+        list(range = range(df$DIABP),values = df$DIABP,label = "Diastolic BP"),
+        list(range = range(df$SYSBP),values = df$SYSBP,label = "Systolic BP"),
+        list(range = c(1, 2),values = df$SEX,label = "Sex")
       )
+    )
+  })
+  
+    
+  mortality_react <- reactive({
+    fit <- survfit(Surv(Month, DEATH) ~ TRTMT, data = dig.df)
+})
+
+# Risk of Mortality 
+  output$surv_plotly <- renderPlotly({
+    plot(fit,
+         col = c("blue", "red"),          
+         lty = 1:2,                      
+         xlab = "Time (Months)",          
+         ylab = "Cumulative Death Probability",   
+         main = "Mortality Curve by Treatment"
+    )
+    
+    legend("topleft",
+           legend = levels(dig.df$TRTMT),
+           col = c("blue", "red"),
+           lty = 1:2,
+           title = "Treatment"
+
     )
   })
   
