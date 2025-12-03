@@ -29,17 +29,14 @@ ui <- dashboardPage(
       id = "tabs",
       
       # use menuItem to make tabs for different components of the study we want to discuss:
-      menuItem("Final - Study Information", icon = icon("th"), tabName = "study_info", badgeLabel = "new",
+      menuItem("Study Overview", icon = icon("th"), tabName = "study_info", badgeLabel = "new",
                badgeColor = "green"),
-      menuItem("Final - Graphs", tabname = "Graphs", icon = icon("star"),
+      menuItem("Interactive Graphs", tabname = "Graphs", icon = icon("star"),
                menuSubItem("Baseline Characteristics", tabName = "baseline_characteristics"),
                menuSubItem("Patient Hospitalisations", tabName = "patient_hospitalisations"),
                menuSubItem("Patient Deaths", tabName = "patient_deaths")
       ),
-      menuItem("Final - Table", tabName = "table", icon = icon("star")),
-      menuItem("Continuous Hospitalisations", tabName = "cont_hosp", icon = icon("circle")),
-      menuItem("Basic Mortality", tabName = "bas_mort", icon = icon("circle")),
-      menuItem("Interactive Mortality", tabName = "interact_surv", icon = icon("circle"))
+      menuItem("Table", tabName = "table", icon = icon("heart"))
     ),
     
     textOutput("res")
