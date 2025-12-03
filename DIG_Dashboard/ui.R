@@ -189,12 +189,18 @@ ui <- dashboardPage(
                        Finally, both race and sex seem to have no effect on hospitalisations or death.")))),
       
       tabItem("patient_deaths",
-              fluidPage(
-                box(width = 8, title = "Mortality Plot", collapsible = T, status = "warning", solidHeader = T,
-                    radioButtons("mort_op", "Select your factor:", c("Worsening Heart Failure" = "WHF","History of Cardiovascular Disease"= "CVD")),
-                    plotlyOutput("surv_plotly"),
-                    )
-              )),
+              box(width = 8,
+                  plotOutput("basic_surv_plot"))),
+              
+              
+              
+              
+              # fluidPage(
+              #   box(width = 8, title = "Mortality Plot", collapsible = T, status = "warning", solidHeader = T,
+              #       radioButtons("mort_op", "Select your factor:", c("Worsening Heart Failure" = "WHF","History of Cardiovascular Disease"= "CVD")),
+              #       plotlyOutput("surv_plotly"),
+              #       )
+              # )),
       
      
       tabItem("cont_hosp",
@@ -202,9 +208,9 @@ ui <- dashboardPage(
               box(selectInput("features", "Features:",
                               c("Age" = "AGE", "BMI", "Serum Potassium Level" = "KLEVEL", "Serum Creatinine (mg/dL)" = "CREAT", "Ejection Fraction Percent" = "EJF_PER"),
                               selected = "Age"))),
-      tabItem("bas_mort",
-              box(plotOutput("basic_surv_plot"))
-              ),
+      # tabItem("bas_mort",
+      #         box(plotOutput("basic_surv_plot"))
+      #         ),
       
       tabItem("interact_surv",box(
                 width = 12,

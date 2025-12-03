@@ -284,8 +284,8 @@ server <- function(input, output, session) {
       line = list(
         color = df$TRTMT,
         colorscale = list(
-          list(0, "pink"),
-          list(1, "blue")
+          list(0, "steelblue"),
+          list(1, "darkred")
         )
       ),
       dimensions = list(
@@ -300,7 +300,11 @@ server <- function(input, output, session) {
     )
   })
   
-    
+  
+  
+# Interactive mortality plot
+  
+  
   mortality_react <- reactive({
     fit <- survfit(Surv(Month, DEATH) ~ TRTMT, data = dig.df)
 })
