@@ -141,7 +141,6 @@ ui <- dashboardPage(
                  visualising each patients baseline characteristic to disern if both groups are comparable. We can see that outside of a few outliers, the consensus
                  of the population is relative similarity between these characteristics. Feel free to explore the dataset with the sliders shown on this page!"),
               fluidRow(
-                
                 # Baseline Plotly
                 box(width = 8, title = "Interactive plot comparing baseline characteristics between gender and treatment group", collapsible = T, status = "warning", solidHeader = T,
                     plotlyOutput("baseline_plotly")),
@@ -171,7 +170,7 @@ ui <- dashboardPage(
                   box(width = 8, title = "Mortality plot", collapsible = T, status = "warning", solidHeader = T,
                       plotOutput("Mortality_Plot")),
                   box(width = 4, title = "Select Feature:", collapsible = T, status = "warning", solidHeader = T,
-                      selectInput("features", 
+                      selectInput("features", "Features:",
                                   c("WHF", "CVD", "Sex" = "SEX", "History of Hypertension" = "HYPERTEN", "History of Diabetes" = "DIABETES", "Race" = "RACE"),
                                   selected = "WHF")),
                   box(width = 8, title = "Hospitalisation Plot", collapsible = T, status = "warning", solidHeader = T,
@@ -192,11 +191,11 @@ ui <- dashboardPage(
                   box(width = 8, title = "Mortality Plot", collapsible = T, status = "warning", solidHeader = T,
                     plotOutput("continuous_deaths_plot")),
                   box(width = 4, title = "Select Feature:", collapsible = T, status = "warning", solidHeader = T,
-                      selectInput("features", 
+                      selectInput("features", "Features:",
                                   c("Age" = "AGE", "BMI", "Serum Potassium Level" = "KLEVEL", "Serum Creatinine (mg/dL)" = "CREAT", "Ejection Fraction Percent" = "EJF_PER"),
                                   selected = "Age")),
                   box(width = 8, title = "Hospitalization Plot", collapsible = T, status = "warning", solidHeader = T,
-                     plotOutput("continuous_hospitalisations_plot")))
+                     plotOutput("continuous_hospitalisations_plot"))
                 )),
                   
       
@@ -210,4 +209,5 @@ ui <- dashboardPage(
       )
     )
   )
+)
 )
