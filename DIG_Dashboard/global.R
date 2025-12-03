@@ -5,7 +5,7 @@ library("plotly")
 
 dig.df <- read_csv("DIG.csv", 
                    col_names = TRUE, 
-                   col_select = c(ID, TRTMT, AGE, SEX, BMI, KLEVEL, CREAT, DIABP, SYSBP, HYPERTEN, CVD, WHF, DIG, HOSP, HOSPDAYS, DEATH, DEATHDAY, DIGDOSER, DIGDOSE, RACE, EJF_PER),
+                   col_select = c(ID, TRTMT, AGE, SEX, BMI, KLEVEL, CREAT, DIABP, SYSBP, HYPERTEN, CVD, WHF, DIG, HOSP, HOSPDAYS, DEATH, DEATHDAY, DIGDOSER, DIGDOSE, RACE, EJF_PER, DIABETES),
                    col_types = cols(
                      ID = col_integer(),
                      TRTMT = col_logical(),
@@ -27,7 +27,8 @@ dig.df <- read_csv("DIG.csv",
                      DIGDOSER = col_double(),
                      DIGDOSE = col_double(),
                      RACE = col_factor(),
-                     EJF_PER = col_double()))
+                     EJF_PER = col_double(),
+                     DIABETES = col_logical()))
 
 ## label the factors described in the codebook: 
 dig.df$TRTMT <- factor(dig.df$TRTMT,
@@ -62,6 +63,9 @@ dig.df$HOSP <- factor(dig.df$HOSP,
 dig.df$RACE <- factor(dig.df$RACE,
                       levels = c(1, 2),
                       labels = c("White", "Nonwhite"))
+dig.df$DIABETES <- factor(dig.df$DIABETES,
+                          levels = c("FALSE", "TRUE"),
+                          labels = c("No History of Diabetes", "History of Diabetes"))
 
 ## mutate dig.df to include a new column,"Month":
 dig.df <- dig.df %>%
@@ -128,3 +132,12 @@ dig.df_complete$SEX <- as.numeric(factor(dig.df_complete$SEX))
 
 # fit for plot
 fit <- survfit(Surv(Month, DEATH) ~ TRTMT + CVD, data = dig.df)
+
+
+# dataframe for the interactive survfit
+survfit.df <- dig.df %>%
+  mutate(DEATH  = case_when(
+    DEATH == "Alive" ~ 0,
+    DEATH == "Death" ~ 1
+  ))
+

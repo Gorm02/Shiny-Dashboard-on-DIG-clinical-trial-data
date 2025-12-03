@@ -174,7 +174,7 @@ ui <- dashboardPage(
                     plotOutput("Mortality_Plot")),
                 box(width = 4, title = "Select Feature:", collapsible = T, status = "warning", solidHeader = T,
                     selectInput("features", "Features:",
-                                c("WHF", "CVD", "Sex" = "SEX", "History of Hypertension" = "HYPERTEN", "Race" = "RACE"),
+                                c("WHF", "CVD", "Sex" = "SEX", "History of Hypertension" = "HYPERTEN", "History of Diabetes" = "DIABETES", "Race" = "RACE"),
                                 selected = "WHF")),
                 box(width = 8, title = "Mortality plot 2", collapsible = T, status = "warning", solidHeader = T,
                         plotOutput("Hospitalisation_Plot")),
@@ -190,7 +190,12 @@ ui <- dashboardPage(
       
       tabItem("patient_deaths",
               box(width = 8,
-                  plotOutput("basic_surv_plot"))),
+                  plotOutput("basic_surv_plot")),
+              box(width = 12,
+                  box(plotOutput("survPlot")),
+                  box(selectInput("features", "Features:",
+                                  c("CVD", "WHF", "DIABETES"), selected = "CVD")))
+              ),
               
               
               
@@ -212,7 +217,8 @@ ui <- dashboardPage(
       #         box(plotOutput("basic_surv_plot"))
       #         ),
       
-      tabItem("interact_surv",box(
+      tabItem("interact_surv",
+              box(
                 width = 12,
                 plotlyOutput("survPlot_main", height = "500px")
               ),
@@ -220,5 +226,6 @@ ui <- dashboardPage(
       )
   )
 )
+
 
 

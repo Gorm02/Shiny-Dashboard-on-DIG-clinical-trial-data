@@ -140,56 +140,7 @@ server <- function(input, output, session) {
                risk.table.fontsize = 3.0)
   })
   
-  # Preparing for the interactive survival plot (reactive expression):
-  survfit_reactive_model <- reactive({
-    f <- as.formula(paste("Surv(Month, DEATH) ~ TRTMT +", input$features))
-     return(survfit(f, data = survfit.df))
-  })
-  
-  output$survPlot_main <- renderPlotly({
-
-    p <- ggsurvplot(
-      survfit_reactive_model(),
-
-    ggsurvplot(
-      fit,
-      pval = TRUE,
-      conf.int = TRUE,
-      conf.int.style = "step",
-      xlab = "Time in Months",
-      ylab = "Risk of Mortality",
-      break.time.by = 6,
-      risk.table = "abs_pct",
-      risk.table.col = "strata",
-      risk.table.text = FALSE,
-      linetype = "strata",
-      ncensor.plot = TRUE,
-      censor.shape = "|",
-      censor.size = 3,
-      legend.labs = c(
-        "Placebo + No CVD", 
-        "Placebo + CVD",
-        "Treatment + No CVD", 
-        "Treatment + CVD"
-      ),
-      palette = "Awtools",
-      title = "Figure 17: Risk of Mortality Over Time",
-      subtitle = "Within each Treatment Group",
-      font.title = c(22, "bold", "black"),
-      ggtheme = theme_minimal() +
-        theme(
-          plot.title = element_text(hjust = 0.5, face = "bold"),
-          plot.subtitle = element_text(hjust = 0.5, size = 16, face = "italic")
-        ),
-      risk.table.height = 0.25,
-      risk.table.fontsize = 2.0,
-
-    ggplotly(p$plot)))
-
-  
-
-  })  
-  
+ 
   # plot showing number of patients per group
   output$trtmt_plot <- renderPlot({
     ggplot(data = q1, aes(x = Treatment_Group, y = Number_of_Patients, fill = Treatment_Group)) + 
@@ -300,35 +251,99 @@ server <- function(input, output, session) {
     )
   })
   
+  ####################################################################
+  # Interactive mortality plot
   
-  
-# Interactive mortality plot
-  
-  
-  mortality_react <- reactive({
-    fit <- survfit(Surv(Month, DEATH) ~ TRTMT, data = dig.df)
-})
-
-# Risk of Mortality 
-  output$surv_plotly <- renderPlotly({
-    plot(fit,
-         col = c("blue", "red"),          
-         lty = 1:2,                      
-         xlab = "Time (Months)",          
-         ylab = "Cumulative Death Probability",   
-         main = "Mortality Curve by Treatment"
-    )
-    
-    legend("topleft",
-           legend = levels(dig.df$TRTMT),
-           col = c("blue", "red"),
-           lty = 1:2,
-           title = "Treatment"
-
-    )
+  survfit_reactive_model <- reactive({
+    formula <- as.formula(paste("Surv(Month, DEATH) ~ TRTMT +", input$features))
+    interact_fit <- survfit(Surv(Month, DEATH) ~ TRTMT + get(input$features), data = survfit.df)
+    interact_fit$surv <- 1 - interact_fit$surv
+    interact_fit$lower <- 1 - interact_fit$lower
+    interact_fit$upper <- 1- interact_fit$upper
+    return(interact_fit)
   })
   
-  #testing
+  
+  # plot this interactively
+  output$survPlot <- renderPlot({
+    plot(survfit_reactive_model(), main = paste("Survival Curve for", input$features), col = 1:2)
+  })
+  
+  
+#   # Preparing for the interactive survival plot (reactive expression):
+#   survfit_reactive_model <- reactive({
+#     f <- as.formula(paste("Surv(Month, DEATH) ~ TRTMT +", input$features))
+#     return(survfit(f, data = survfit.df))
+#   })
+#   
+#   output$survPlot_main <- renderPlotly({
+#     
+#     p <- ggsurvplot(
+#       survfit_reactive_model(),
+#       
+#       ggsurvplot(
+#         fit,
+#         pval = TRUE,
+#         conf.int = TRUE,
+#         conf.int.style = "step",
+#         xlab = "Time in Months",
+#         ylab = "Risk of Mortality",
+#         break.time.by = 6,
+#         risk.table = "abs_pct",
+#         risk.table.col = "strata",
+#         risk.table.text = FALSE,
+#         linetype = "strata",
+#         ncensor.plot = TRUE,
+#         censor.shape = "|",
+#         censor.size = 3,
+#         legend.labs = c(
+#           "Placebo + No CVD", 
+#           "Placebo + CVD",
+#           "Treatment + No CVD", 
+#           "Treatment + CVD"
+#         ),
+#         palette = "Awtools",
+#         title = "Figure 17: Risk of Mortality Over Time",
+#         subtitle = "Within each Treatment Group",
+#         font.title = c(22, "bold", "black"),
+#         ggtheme = theme_minimal() +
+#           theme(
+#             plot.title = element_text(hjust = 0.5, face = "bold"),
+#             plot.subtitle = element_text(hjust = 0.5, size = 16, face = "italic")
+#           ),
+#         risk.table.height = 0.25,
+#         risk.table.fontsize = 2.0,
+#         
+#         ggplotly(p$plot)))
+#     
+#   })  
+#   
+#   
+#   
+#   mortality_react <- reactive({
+#     fit <- survfit(Surv(Month, DEATH) ~ TRTMT, data = dig.df)
+# })
+# 
+# # Risk of Mortality 
+#   output$surv_plotly <- renderPlotly({
+#     plot(fit,
+#          col = c("blue", "red"),          
+#          lty = 1:2,                      
+#          xlab = "Time (Months)",          
+#          ylab = "Cumulative Death Probability",   
+#          main = "Mortality Curve by Treatment"
+#     )
+#     
+#     legend("topleft",
+#            legend = levels(dig.df$TRTMT),
+#            col = c("blue", "red"),
+#            lty = 1:2,
+#            title = "Treatment"
+# 
+#     )
+#   })
+#   
+#   #testing
 
 }
 
