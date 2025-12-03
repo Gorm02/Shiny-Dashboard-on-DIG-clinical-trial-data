@@ -186,7 +186,17 @@ ui <- dashboardPage(
                     The placebo group had a slightly higher proportion of hospitalizations compared to the treatment group. Conversely, the treatment group had a slightly higher
                     proportion of patients who were not hospitalized. This suggests that Digoxin potentially may reduce the risk of hospitalization. Between both treatment and placebo groups, worsening heart failure (WHF) is 100% correlated with the number of hospitalizations.
                     Patients who did not experience WHF showed slight variation in the percentage of hospitalizations in this study, suggesting that WHF is the key attributing factor to the number of hospitalizations in this study. 
-                       Finally, both race and sex seem to have no effect on hospitalisations or death.")))),
+                       Finally, both race and sex seem to have no effect on hospitalisations or death.")),
+                box(width = 12,
+                  h2("insert text"),
+                  h4("insert text")),
+                box(width = 8, title = "Hospitalization Plot", collapsible = T, status = "warning", solidHeader = T,
+                  plotOutput("continuous_hospitalisations_plot")),
+                box(width = 4, title = "Select Feature:", collapsible = T, status = "warning", solidHeader = T,
+                    selectInput("features", "Features:",
+                                c("Age" = "AGE", "BMI", "Serum Potassium Level" = "KLEVEL", "Serum Creatinine (mg/dL)" = "CREAT", "Ejection Fraction Percent" = "EJF_PER"),
+                                selected = "Age")))),
+                  
       
       tabItem("patient_deaths",
               box(width = 8,
@@ -208,14 +218,8 @@ ui <- dashboardPage(
       # )),
       
       
-      tabItem("cont_hosp",
-              box(plotOutput("continuous_hospitalisations_plot")),
-              box(selectInput("features", "Features:",
-                              c("Age" = "AGE", "BMI", "Serum Potassium Level" = "KLEVEL", "Serum Creatinine (mg/dL)" = "CREAT", "Ejection Fraction Percent" = "EJF_PER"),
-                              selected = "Age"))),
-      # tabItem("bas_mort",
-      #         box(plotOutput("basic_surv_plot"))
-      #         ),
+ 
+
       
       tabItem("interact_surv",
               box(
