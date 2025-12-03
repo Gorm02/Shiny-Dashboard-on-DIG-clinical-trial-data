@@ -104,10 +104,10 @@ server <- function(input, output, session) {
   })
   # CONTINUOUS HOSPITALISATIONS
   output$continuous_hospitalisations_plot <- renderPlot({
-    ggplot(data = dig.df, aes(x = HOSP, y = .data[[input$features]], fill = DEATH)) +
+    ggplot(data = dig.df, aes(x = HOSP, y = .data[[input$features]], fill = HOSP)) +
       geom_boxplot() +
       facet_wrap(~TRTMT) +
-      scale_fill_manual(values=c("pink", "maroon") ) +
+      scale_fill_manual(values=c("lightgrey", "blue") ) +
       geom_jitter(alpha = 0.1) +
       labs(title = paste("Figure 1: Patient Hospitalisations in Each Treatment Group by ", input$features),
            x = "Treatment Group",
