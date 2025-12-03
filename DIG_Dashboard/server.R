@@ -6,6 +6,10 @@ library(dplyr)
 library(ggplot2)
 library(bslib)
 library(plotly)
+library(ggplot2)
+library(survival)
+library(survminer)
+
 
 server <- function(input, output, session) {
   
@@ -130,7 +134,7 @@ server <- function(input, output, session) {
                legend.labs = 
                  c("Placebo", "Treatment"),
                palette = c("cadetblue1", "firebrick4"),
-               title = paste("Risk of Mortality Over Time for Patients With ", input$features),
+               title = paste("Risk of Mortality Over Time for Patients in Each Treatment Group"),
                subtitle = "Within each Treatment Group",
                font.title = c(22, "bold", "black"),
                ggtheme = theme_classic() + 
@@ -252,98 +256,67 @@ server <- function(input, output, session) {
   })
   
   ####################################################################
-  # Interactive mortality plot
-  
-  survfit_reactive_model <- reactive({
-    formula <- as.formula(paste("Surv(Month, DEATH) ~ TRTMT +", input$features))
-    interact_fit <- survfit(Surv(Month, DEATH) ~ TRTMT + get(input$features), data = survfit.df)
-    interact_fit$surv <- 1 - interact_fit$surv
-    interact_fit$lower <- 1 - interact_fit$lower
-    interact_fit$upper <- 1- interact_fit$upper
-    return(interact_fit)
+  # # Interactive mortality plot
+  # Reactive expression to generate the survival fit model
+  reactive_survfit_input <- reactive({
+    
+    # to make the input reactive, it has to be in a formula format.
+    # simply doing fit <- survfit(Surv(Month, DEATH) ~ TRTMT + input$features, data = survfit.df) does not seem to work
+    # as survfit works as "survfit(formula, data, \dots)", I have tried specifying the formula with paste to make it reactive outside of the survfit()
+    
+    survfit_formula <- as.formula(paste("Surv(Month, DEATH) ~ TRTMT +", input$features))
+    fit <- survfit(survfit_formula, data = survfit.df)
+    
+    # now we need to change it from the probability of surviving to the risk of dying.
+    fit$surv <- 1 - fit$surv
+    # flip the confidence interval
+    fit$upper <- 1 - fit$lower
+    fit$lower <- 1 - fit$upper
+    
+    return(fit)
   })
   
   
-  # plot this interactively
   output$survPlot <- renderPlot({
-    plot(survfit_reactive_model(), main = paste("Survival Curve for", input$features), col = 1:2)
+    # # within the survplot, set fit_2 as the input data  - for some reason you can't use reactive_survfit_input() directly.
+    fit_2 <- reactive_survfit_input()
+    
+    # set 4 colourblind-safe colours as the line colours
+    plot_colors <- c("magenta", "orange", "aquamarine", "blue")
+    
+    # use plot() to plot the risk of dying in each combination of factors:
+    # for some reason the surv plot could not be made reactive, there was always an error, but it works with the plot() function, there just isn't a risk table
+    plot(fit_2, 
+         main = paste("Survival Curve for Treatment and ", input$features), 
+         col = plot_colors,
+         xlab = "Time in Months",
+         ylab = "Risk of Death",
+         lwd = 2,
+         xlim = c(0, 60),
+         ylim = c(0,1))
+    
+    # label each lines using paste so they change with input
+    legend_labels <- c(paste("Placebo + No", input$features), 
+                       paste("Placebo + ", input$features), 
+                       paste("Treatment + No", input$features), 
+                       paste("Treatment + ", input$features))
+    # set the positions of the legends/text manually so they don't overlap
+    x_positions <- c(0,0,0,0)
+    y_positions <- c(0.9, 0.8, 0.7, 0.6)
+    
+    # use a for loop to add the legend/text to each line
+    # there seems to be a problem making a legend so I used text() instead.
+    for (single_legend in 1:length(legend_labels)) {
+      text(x = x_positions[single_legend],
+           y = y_positions[single_legend],
+           pos = 4,
+           labels = legend_labels[single_legend], 
+           col = plot_colors[single_legend], 
+           cex = 1)
+    }
+    
   })
-  
-  
-#   # Preparing for the interactive survival plot (reactive expression):
-#   survfit_reactive_model <- reactive({
-#     f <- as.formula(paste("Surv(Month, DEATH) ~ TRTMT +", input$features))
-#     return(survfit(f, data = survfit.df))
-#   })
-#   
-#   output$survPlot_main <- renderPlotly({
-#     
-#     p <- ggsurvplot(
-#       survfit_reactive_model(),
-#       
-#       ggsurvplot(
-#         fit,
-#         pval = TRUE,
-#         conf.int = TRUE,
-#         conf.int.style = "step",
-#         xlab = "Time in Months",
-#         ylab = "Risk of Mortality",
-#         break.time.by = 6,
-#         risk.table = "abs_pct",
-#         risk.table.col = "strata",
-#         risk.table.text = FALSE,
-#         linetype = "strata",
-#         ncensor.plot = TRUE,
-#         censor.shape = "|",
-#         censor.size = 3,
-#         legend.labs = c(
-#           "Placebo + No CVD", 
-#           "Placebo + CVD",
-#           "Treatment + No CVD", 
-#           "Treatment + CVD"
-#         ),
-#         palette = "Awtools",
-#         title = "Figure 17: Risk of Mortality Over Time",
-#         subtitle = "Within each Treatment Group",
-#         font.title = c(22, "bold", "black"),
-#         ggtheme = theme_minimal() +
-#           theme(
-#             plot.title = element_text(hjust = 0.5, face = "bold"),
-#             plot.subtitle = element_text(hjust = 0.5, size = 16, face = "italic")
-#           ),
-#         risk.table.height = 0.25,
-#         risk.table.fontsize = 2.0,
-#         
-#         ggplotly(p$plot)))
-#     
-#   })  
-#   
-#   
-#   
-#   mortality_react <- reactive({
-#     fit <- survfit(Surv(Month, DEATH) ~ TRTMT, data = dig.df)
-# })
-# 
-# # Risk of Mortality 
-#   output$surv_plotly <- renderPlotly({
-#     plot(fit,
-#          col = c("blue", "red"),          
-#          lty = 1:2,                      
-#          xlab = "Time (Months)",          
-#          ylab = "Cumulative Death Probability",   
-#          main = "Mortality Curve by Treatment"
-#     )
-#     
-#     legend("topleft",
-#            legend = levels(dig.df$TRTMT),
-#            col = c("blue", "red"),
-#            lty = 1:2,
-#            title = "Treatment"
-# 
-#     )
-#   })
-#   
-#   #testing
-
 }
+
+
 

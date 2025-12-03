@@ -140,4 +140,4 @@ survfit.df <- dig.df %>%
     DEATH == "Alive" ~ 0,
     DEATH == "Death" ~ 1
   ))
-
+  
