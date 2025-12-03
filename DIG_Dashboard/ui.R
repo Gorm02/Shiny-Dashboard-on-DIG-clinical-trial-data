@@ -190,12 +190,15 @@ ui <- dashboardPage(
                 box(width = 12,
                   h2("insert text"),
                   h4("insert text")),
-                box(width = 8, title = "Hospitalization Plot", collapsible = T, status = "warning", solidHeader = T,
-                  plotOutput("continuous_hospitalisations_plot")),
+                box(width = 8, title = "Mortality Plot", collapsible = T, status = "warning", solidHeader = T,
+                  plotOutput("continuous_deaths_plot")),
                 box(width = 4, title = "Select Feature:", collapsible = T, status = "warning", solidHeader = T,
                     selectInput("features", "Features:",
                                 c("Age" = "AGE", "BMI", "Serum Potassium Level" = "KLEVEL", "Serum Creatinine (mg/dL)" = "CREAT", "Ejection Fraction Percent" = "EJF_PER"),
-                                selected = "Age")))),
+                                selected = "Age")),
+                box(width = 8, title = "Hospitalization Plot", collapsible = T, status = "warning", solidHeader = T,
+                   plotOutput("continuous_hospitalisations_plot"))
+                )),
                   
       
       tabItem("patient_deaths",
@@ -205,28 +208,7 @@ ui <- dashboardPage(
                   box(plotOutput("survPlot")),
                   box(selectInput("features", "Features:",
                                   c("CVD", "WHF", "DIABETES"), selected = "CVD")))
-      ),
-      
-      
-      
-      
-      # fluidPage(
-      #   box(width = 8, title = "Mortality Plot", collapsible = T, status = "warning", solidHeader = T,
-      #       radioButtons("mort_op", "Select your factor:", c("Worsening Heart Failure" = "WHF","History of Cardiovascular Disease"= "CVD")),
-      #       plotlyOutput("surv_plotly"),
-      #       )
-      # )),
-      
-      
- 
-
-      
-      tabItem("interact_surv",
-              box(
-                width = 12,
-                plotlyOutput("survPlot_main", height = "500px")
-              ),
-              box(selectInput("featuresmort", "Features:", c("CVD", "WHF"), selected = "CVD")))
+      )
     )
   )
 )
