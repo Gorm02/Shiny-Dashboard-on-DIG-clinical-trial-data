@@ -99,7 +99,7 @@ server <- function(input, output, session) {
       labs(title = paste("Figure 1: Patient Mortality in Each Treatment Group by ", input$features),
            x = "Treatment Group",
            y = input$features,
-           fill = "Treatment Group") +
+           fill = "Patient Mortality") +
       theme_minimal()
   })
   # CONTINUOUS HOSPITALISATIONS
@@ -112,7 +112,7 @@ server <- function(input, output, session) {
       labs(title = paste("Figure 1: Patient Hospitalisations in Each Treatment Group by ", input$features),
            x = "Treatment Group",
            y = input$features,
-           fill = "Treatment Group") +
+           fill = "Patient Hospitalisation") +
       theme_minimal()
   })
   

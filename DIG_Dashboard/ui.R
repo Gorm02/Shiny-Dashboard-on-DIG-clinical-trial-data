@@ -164,17 +164,18 @@ ui <- dashboardPage(
       # mortality plot in the new tab key takeaways. 
       tabItem("patient_hospitalisations",
               fluidPage(
-                h2("Comparing number of hospitalisations and deaths across different factors"),
+                h2("Comparing number of hospitalisations and deaths across categorical factors"),
                 h4("This tab is dedicated to visualising the effect features such as worsening heart failure, history of cardiovascular disease, history of hypertension, and race
                    have on the number of hospitalisations and deaths. Select a feature to view relevent bar charts."),
-                box(width = 8, title = "Mortality plot", collapsible = T, status = "warning", solidHeader = T,
-                    plotOutput("Mortality_Plot")),
-                box(width = 4, title = "Select Feature:", collapsible = T, status = "warning", solidHeader = T,
-                    selectInput("features", "Features:",
-                                c("WHF", "CVD", "Sex" = "SEX", "History of Hypertension" = "HYPERTEN", "History of Diabetes" = "DIABETES", "Race" = "RACE"),
-                                selected = "WHF")),
-                box(width = 8, title = "Mortality plot 2", collapsible = T, status = "warning", solidHeader = T,
-                    plotOutput("Hospitalisation_Plot")),
+                fluidRow(
+                  box(width = 8, title = "Mortality plot", collapsible = T, status = "warning", solidHeader = T,
+                      plotOutput("Mortality_Plot")),
+                  box(width = 4, title = "Select Feature:", collapsible = T, status = "warning", solidHeader = T,
+                      selectInput("features", 
+                                  c("WHF", "CVD", "Sex" = "SEX", "History of Hypertension" = "HYPERTEN", "History of Diabetes" = "DIABETES", "Race" = "RACE"),
+                                  selected = "WHF")),
+                  box(width = 8, title = "Hospitalisation Plot", collapsible = T, status = "warning", solidHeader = T,
+                      plotOutput("Hospitalisation_Plot"))),
                 box(width = 12, title = "Key Insights",collapsible = F,
                     h4("Looking at prior history to cardiovascular disease, the presence of prior CVD did not significantly affect mortality rates within either the placebo or treatment groups.
                     In the placebo group, patients without a history of CVD showed a slightly lower proportion of deaths compared to those with CVD.
@@ -185,16 +186,17 @@ ui <- dashboardPage(
                     Patients who did not experience WHF showed slight variation in the percentage of hospitalizations in this study, suggesting that WHF is the key attributing factor to the number of hospitalizations in this study. 
                        Finally, both race and sex seem to have no effect on hospitalisations or death.")),
                 box(width = 12,
-                  h2("insert text"),
-                  h4("insert text")),
-                box(width = 8, title = "Mortality Plot", collapsible = T, status = "warning", solidHeader = T,
-                  plotOutput("continuous_deaths_plot")),
-                box(width = 4, title = "Select Feature:", collapsible = T, status = "warning", solidHeader = T,
-                    selectInput("features", "Features:",
-                                c("Age" = "AGE", "BMI", "Serum Potassium Level" = "KLEVEL", "Serum Creatinine (mg/dL)" = "CREAT", "Ejection Fraction Percent" = "EJF_PER"),
-                                selected = "Age")),
-                box(width = 8, title = "Hospitalization Plot", collapsible = T, status = "warning", solidHeader = T,
-                   plotOutput("continuous_hospitalisations_plot"))
+                  h2("Comparing number of hospitalisations and deaths across continuous factors"),
+                  h4("Investigate further to see whether factors such as age, BMI or ejection fraction percent impacted patient mortality or hospitalisation.")),
+                fluidRow(
+                  box(width = 8, title = "Mortality Plot", collapsible = T, status = "warning", solidHeader = T,
+                    plotOutput("continuous_deaths_plot")),
+                  box(width = 4, title = "Select Feature:", collapsible = T, status = "warning", solidHeader = T,
+                      selectInput("features", 
+                                  c("Age" = "AGE", "BMI", "Serum Potassium Level" = "KLEVEL", "Serum Creatinine (mg/dL)" = "CREAT", "Ejection Fraction Percent" = "EJF_PER"),
+                                  selected = "Age")),
+                  box(width = 8, title = "Hospitalization Plot", collapsible = T, status = "warning", solidHeader = T,
+                     plotOutput("continuous_hospitalisations_plot")))
                 )),
                   
       
