@@ -171,6 +171,7 @@ ui <- dashboardPage(
                       plotOutput("Mortality_Plot")),
                   box(width = 4, title = "Select Feature:", collapsible = T, status = "warning", solidHeader = T,
                       selectInput("features", "Features:",
+                                  # changed the WHF etc into their full names in the dropdown:
                                   c("Worsening Heart Failure" = "WHF", "Cardiovascular Disease" = "CVD", "History of Hypertension" = "HYPERTEN", "History of Diabetes" = "DIABETES", "Race" = "RACE"),
                                   selected = "WHF")),
                   box(width = 8, title = "Hospitalisation Plot", collapsible = T, status = "warning", solidHeader = T,
@@ -193,6 +194,7 @@ ui <- dashboardPage(
                     plotOutput("continuous_deaths_plot")),
                   box(width = 4, title = "Select Feature:", collapsible = T, status = "warning", solidHeader = T,
                       selectInput("features", "Features:",
+                                  # changed the WHF etc into their full names in the dropdown:
                                   c("Age" = "AGE", "BMI", "Serum Potassium Level" = "KLEVEL", "Serum Creatinine (mg/dL)" = "CREAT", "Ejection Fraction Percent" = "EJF_PER"),
                                   selected = "Age")),
                   box(width = 8, title = "Hospitalization Plot", collapsible = T, status = "warning", solidHeader = T,
