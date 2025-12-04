@@ -187,7 +187,7 @@ ui <- dashboardPage(
                 box(width = 12,
                   h2("Comparing number of hospitalisations and deaths across continuous factors"),
                   h4("Investigate further to see whether factors such as age, BMI or ejection fraction percent impacted patient mortality or hospitalisation.")),
-                fluidRow(
+                
                   box(width = 8, title = "Mortality Plot", collapsible = T, status = "warning", solidHeader = T,
                     plotOutput("continuous_deaths_plot")),
                   box(width = 4, title = "Select Feature:", collapsible = T, status = "warning", solidHeader = T,
@@ -197,17 +197,25 @@ ui <- dashboardPage(
                   box(width = 8, title = "Hospitalization Plot", collapsible = T, status = "warning", solidHeader = T,
                      plotOutput("continuous_hospitalisations_plot"))
                 )),
-                  
-      
+
       tabItem("patient_deaths",
-              box(width = 8,
+              fluidPage(
+                h2("Risk of mortality overtime and other factors"),
+              box(width = 12,
                   plotOutput("basic_surv_plot")),
               box(width = 12,
                   box(plotOutput("survPlot")),
                   box(selectInput("features", "Features:",
-                                  c("CVD", "WHF", "DIABETES"), selected = "CVD")))
+                                  c("CVD", "WHF", "DIABETES"), selected = "CVD"))),
+              h2("Conclusions"),
+              h4("The interactive mortality curve shows a clear enhanced risk or mortality when the patient has prior history of worsening heart failure. This statement 
+                 holds true regardless of treatment or placebo. If the patient has a history of cardiovascular disease, the trend is identical. If patients have diabetes,
+                 there seems to be no effect on risk of mortality in both groups. The static mortality curve shows patient deaths only occurs after ~30 months. This is supported 
+                 with the increased risk of mortality over time as demonstrated in the same plot."), br(),
+              h4("In conclusion, mortality rate increased gradually overtime and the main contributing factors for increased risk to mortality were prior history of cardiovascular
+                 disease and worsening heart failure irrespective of treatment group.")
+        )
       )
     )
   )
-)
 )
