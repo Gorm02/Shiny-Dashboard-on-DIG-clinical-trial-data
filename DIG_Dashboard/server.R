@@ -26,7 +26,7 @@ server <- function(input, output, session) {
         title = "Welcome to our interactive app exploring the DIG clinical trial data",
         easyClose = T,
         p("Thank you for showing interest in our interactive app exploring the DIG dataset. Digoxin is one of the oldest drugs used to treat heart failure
-        and concerns about its safty and efficacy is put into question. This apps purpose is to visualize the reported findings to paint a clearer picture than
+        and concerns about its safety and efficacy is put into question. This apps purpose is to visualize the reported findings to paint a clearer picture than
         static spreadsheets and graphs."),
         
         p(
