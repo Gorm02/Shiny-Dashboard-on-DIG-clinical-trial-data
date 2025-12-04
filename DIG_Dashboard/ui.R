@@ -208,7 +208,7 @@ ui <- dashboardPage(
                   plotOutput("survPlot")),
                 box(width = 4, title = "Select Feature:", collapsible = T, status = "warning", solidHeader = T,
                     selectInput("features", "Features:",
-                                c("CVD", "WHF", "DIABETES"), selected = "CVD")),
+                                c("WHF", "CVD", "History of Hypertension" = "HYPERTEN", "History of Diabetes" = "DIABETES"), selected = "CVD")),
           
                 box(width = 12, collapsible = F,
                     h2("Conclusions"),

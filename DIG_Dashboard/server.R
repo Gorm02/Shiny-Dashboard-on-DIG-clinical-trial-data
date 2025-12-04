@@ -193,7 +193,7 @@ server <- function(input, output, session) {
       scale_fill_manual(values = c("cadetblue1", "firebrick4") ) +
       theme_classic() + 
       labs(title = "Deaths in Each Treatment Group",
-           x = "Deaths",
+           x = "Deaths during the Trial",
            y = "Number of Patients",
            fill = "Treatment Group") +
       scale_y_continuous(expand = expansion(mult = c(0, 0.05)))
@@ -208,7 +208,7 @@ server <- function(input, output, session) {
       theme_classic() + 
       labs(title = "Hospitalizations in Each Treatment Groups",
            fill = "Treatment Group",
-           x = "Hospitalized during the Trial",
+           x = "Hospitalizations during the Trial",
            y = "Number of Patients") +
       scale_y_continuous(expand = expansion(mult = c(0, 0.05)))
   })
