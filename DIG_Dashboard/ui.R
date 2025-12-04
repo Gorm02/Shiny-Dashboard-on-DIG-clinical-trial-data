@@ -56,7 +56,7 @@ ui <- dashboardPage(
     
     
     
-    # Changes Title Font to Times New Roman (integrated CSS file)
+    # Changes Title Font to Times New Roman (integrated CSS file). 
     tags$head(tags$style(HTML('
                               .main-header .logo {
                               font-family: "Georgia", Times, "Times New Roman", serif;
