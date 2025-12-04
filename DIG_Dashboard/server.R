@@ -96,7 +96,7 @@ server <- function(input, output, session) {
       facet_wrap(~TRTMT) +
       scale_fill_manual(values=c("pink", "maroon") ) +
       geom_jitter(alpha = 0.1) +
-      labs(title = paste("Figure 1: Patient Mortality in Each Treatment Group by ", input$features),
+      labs(title = paste("Patient Mortality in Each Treatment Group by ", input$features),
            x = "Treatment Group",
            y = input$features,
            fill = "Patient Mortality") +
@@ -109,7 +109,7 @@ server <- function(input, output, session) {
       facet_wrap(~TRTMT) +
       scale_fill_manual(values=c("lightgrey", "blue") ) +
       geom_jitter(alpha = 0.1) +
-      labs(title = paste("Figure 1: Patient Hospitalisations in Each Treatment Group by ", input$features),
+      labs(title = paste("Patient Hospitalisations in Each Treatment Group by ", input$features),
            x = "Treatment Group",
            y = input$features,
            fill = "Patient Hospitalisation") +
@@ -134,7 +134,7 @@ server <- function(input, output, session) {
                legend.labs = 
                  c("Placebo", "Treatment"),
                palette = c("cadetblue1", "firebrick4"),
-               title = paste("Risk of Mortality Over Time for Patients in Each Treatment Group"),
+               title = paste("Risk of Mortality Over Time"),
                subtitle = "Within each Treatment Group",
                font.title = c(22, "bold", "black"),
                ggtheme = theme_classic() + 
@@ -192,7 +192,7 @@ server <- function(input, output, session) {
                color = "black") +
       scale_fill_manual(values = c("cadetblue1", "firebrick4") ) +
       theme_classic() + 
-      labs(title = "Deaths per Treatment Group",
+      labs(title = "Deaths in Each Treatment Group",
            x = "Deaths",
            y = "Number of Patients",
            fill = "Treatment Group") +
@@ -206,7 +206,7 @@ server <- function(input, output, session) {
                color = "black") +
       scale_fill_manual(values = c("cadetblue1", "firebrick4") ) +
       theme_classic() + 
-      labs(title = "Hospitalizations and Treatment Groups",
+      labs(title = "Hospitalizations in Each Treatment Groups",
            fill = "Treatment Group",
            x = "Hospitalized during the Trial",
            y = "Number of Patients") +
@@ -282,12 +282,12 @@ server <- function(input, output, session) {
     fit_2 <- reactive_survfit_input()
     
     # set 4 colourblind-safe colours as the line colours
-    plot_colors <- c("magenta", "orange", "aquamarine", "blue")
+    plot_colors <- c("magenta", "orange", "aquamarine4", "blue")
     
     # use plot() to plot the risk of dying in each combination of factors:
     # for some reason the surv plot could not be made reactive, there was always an error, but it works with the plot() function, there just isn't a risk table
     plot(fit_2, 
-         main = paste("Survival Curve for Treatment and ", input$features), 
+         main = paste("Risk of Mortality Over Time For Each Treatment Group and ", input$features), 
          col = plot_colors,
          xlab = "Time in Months",
          ylab = "Risk of Death",

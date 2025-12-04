@@ -33,8 +33,8 @@ ui <- dashboardPage(
                badgeColor = "green"),
       menuItem("Interactive Graphs", tabname = "Graphs", icon = icon("star"),
                menuSubItem("Baseline Characteristics", tabName = "baseline_characteristics"),
-               menuSubItem("Patient Hospitalisations", tabName = "patient_hospitalisations"),
-               menuSubItem("Patient Deaths", tabName = "patient_deaths")
+               menuSubItem("Hospitalisations and Deaths", tabName = "patient_hospitalisations"),
+               menuSubItem("Risk of Mortality", tabName = "patient_deaths")
       ),
       menuItem("Table", tabName = "table", icon = icon("heart"))
     ),
@@ -175,7 +175,8 @@ ui <- dashboardPage(
                                   selected = "WHF")),
                   box(width = 8, title = "Hospitalisation Plot", collapsible = T, status = "warning", solidHeader = T,
                       plotOutput("Hospitalisation_Plot"))),
-                box(width = 12, title = "Key Insights",collapsible = F,
+                box(width = 12, collapsible = F,
+                    h2("Key Insights"),
                     h4("Looking at prior history to cardiovascular disease, the presence of prior CVD did not significantly affect mortality rates within either the placebo or treatment groups.
                     In the placebo group, patients without a history of CVD showed a slightly lower proportion of deaths compared to those with CVD.
                     In contrast, within the treatment group, mortality appeared marginally higher among those without a CVD history,
@@ -201,20 +202,23 @@ ui <- dashboardPage(
       tabItem("patient_deaths",
               fluidPage(
                 h2("Risk of mortality overtime and other factors"),
-              box(width = 12,
-                  plotOutput("basic_surv_plot")),
-              box(width = 12,
-                  box(plotOutput("survPlot")),
-                  box(selectInput("features", "Features:",
-                                  c("CVD", "WHF", "DIABETES"), selected = "CVD"))),
-              h2("Conclusions"),
-              h4("The interactive mortality curve shows a clear enhanced risk or mortality when the patient has prior history of worsening heart failure. This statement 
-                 holds true regardless of treatment or placebo. If the patient has a history of cardiovascular disease, the trend is identical. If patients have diabetes,
-                 there seems to be no effect on risk of mortality in both groups. The static mortality curve shows patient deaths only occurs after ~30 months. This is supported 
-                 with the increased risk of mortality over time as demonstrated in the same plot."), br(),
-              h4("In conclusion, mortality rate increased gradually overtime and the main contributing factors for increased risk to mortality were prior history of cardiovascular
-                 disease and worsening heart failure irrespective of treatment group.")
-        )
+                box(width = 12, title = "Mortality Risk Plot in Each Treatment Group", collapsible = T, status = "warning", solidHeader = T,
+                    plotOutput("basic_surv_plot")),
+                box(width = 8, title = "Interactive Mortality Risk Plot", collapsible = T, status = "warning", solidHeader = T,
+                  plotOutput("survPlot")),
+                box(width = 4, title = "Select Feature:", collapsible = T, status = "warning", solidHeader = T,
+                    selectInput("features", "Features:",
+                                c("CVD", "WHF", "DIABETES"), selected = "CVD")),
+          
+                box(width = 12, collapsible = F,
+                    h2("Conclusions"),
+                    h4("The interactive mortality curve shows a clear enhanced risk or mortality when the patient has prior history of worsening heart failure. This statement 
+                   holds true regardless of treatment or placebo. If the patient has a history of cardiovascular disease, the trend is identical. If patients have diabetes,
+                   there seems to be no effect on risk of mortality in both groups. The static mortality curve shows patient deaths only occurs after ~30 months. This is supported 
+                   with the increased risk of mortality over time as demonstrated in the same plot."), br(),
+                    h4("In conclusion, mortality rate increased gradually overtime and the main contributing factors for increased risk to mortality were prior history of cardiovascular
+                   disease and worsening heart failure irrespective of treatment group."))
+          )
       )
     )
   )
