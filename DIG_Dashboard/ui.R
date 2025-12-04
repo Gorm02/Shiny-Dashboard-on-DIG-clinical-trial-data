@@ -171,7 +171,7 @@ ui <- dashboardPage(
                       plotOutput("Mortality_Plot")),
                   box(width = 4, title = "Select Feature:", collapsible = T, status = "warning", solidHeader = T,
                       selectInput("features", "Features:",
-                                  c("WHF", "CVD", "Sex" = "SEX", "History of Hypertension" = "HYPERTEN", "History of Diabetes" = "DIABETES", "Race" = "RACE"),
+                                  c("Worsening Heart Failure" = "WHF", "Cardiovascular Disease" = "CVD", "History of Hypertension" = "HYPERTEN", "History of Diabetes" = "DIABETES", "Race" = "RACE"),
                                   selected = "WHF")),
                   box(width = 8, title = "Hospitalisation Plot", collapsible = T, status = "warning", solidHeader = T,
                       plotOutput("Hospitalisation_Plot"))),
@@ -208,7 +208,7 @@ ui <- dashboardPage(
                   plotOutput("survPlot")),
                 box(width = 4, title = "Select Feature:", collapsible = T, status = "warning", solidHeader = T,
                     selectInput("features", "Features:",
-                                c("WHF", "CVD", "History of Hypertension" = "HYPERTEN", "History of Diabetes" = "DIABETES"), selected = "CVD")),
+                                c("Worsening Heart Failure" = "WHF", "Cardiovascular Disease" = "CVD", "History of Hypertension" = "HYPERTEN", "History of Diabetes" = "DIABETES"), selected = "Worsening Heart Failure")),
           
                 box(width = 12, collapsible = F,
                     h2("Conclusions"),
